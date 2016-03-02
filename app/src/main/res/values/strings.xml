@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">KPA-Mobile</string>
+    <string name="app_name">Kniha plná aktivit</string>
+    <string name="app_name_shortcut">KPA</string>
+
+    <string name="dashboard_summary">Přehled pomůcek</string>
+    <string name="dashboard_contact">Kontaktovat</string>
+    <string name="dashboard_share">Sdílet foto</string>
+    <string name="dashboard_about">O nás</string>
 </resources>

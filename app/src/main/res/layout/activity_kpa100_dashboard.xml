@@ -8,10 +8,65 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard">
+    tools:context="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard"
+    android:background="@drawable/activity_background">
 
-    <TextView
-        android:text="Hello World!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/dashboard_summary"
+                android:onClick="onBtnSummaryClicked"
+                android:elevation="3dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/dashboard_contact"
+                android:onClick="onBtnContactUsClicked"
+                android:layout_marginTop="10dp"/>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/dashboard_share"
+                android:onClick="onBtnSharePhotoClicked"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/dashboard_about"
+                android:onClick="onBtnAboutClicked"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/facebookBlue"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="facebook"
+                android:onClick="onBtnFacebookClicked"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 </RelativeLayout>
