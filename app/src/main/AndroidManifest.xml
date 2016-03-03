@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cz.knihaplnaaktivit.kpa_mobile" >
+    package="cz.knihaplnaaktivit.kpa_mobile">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".KPA100Dashboard" >
+        android:theme="@style/AppTheme">
+        <activity android:name=".KPA100Dashboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".KPA200Summary"
+            android:label="@string/title_activity_kpa200_summary"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
+        </activity>
+        <activity
+            android:name=".KPA201ProductDetail"
+            android:label="@string/title_activity_kpa201_product_detail"
+            android:parentActivityName=".KPA200Summary">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA200Summary" />
         </activity>
     </application>
 

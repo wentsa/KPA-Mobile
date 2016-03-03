@@ -16,7 +16,9 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
     public void onBtnSummaryClicked(View v) {
-
+        Intent intent = new Intent(this, KPA200Summary.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_down, R.anim.stay);
     }
 
     public void onBtnContactUsClicked(View v) {
