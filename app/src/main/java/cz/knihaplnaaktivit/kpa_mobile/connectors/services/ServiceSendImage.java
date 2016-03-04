@@ -109,7 +109,7 @@ public class ServiceSendImage extends IntentService {
     }
 
     private void createNotification() {
-        Intent notificationIntent = new Intent(this, KPA100Dashboard.class); // activitu
+        Intent notificationIntent = new Intent(this, KPA100Dashboard.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this)

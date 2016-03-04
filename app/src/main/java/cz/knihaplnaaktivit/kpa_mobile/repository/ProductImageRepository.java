@@ -17,27 +17,53 @@ public class ProductImageRepository {
 
     private static ProductImageRepository sInstance;
 
-    public static synchronized ProductImageRepository getInstance(Context ctx) {
+    public static synchronized ProductImageRepository getInstance() {
         if(sInstance == null) {
-            sInstance = new ProductImageRepository(ctx);
+            sInstance = new ProductImageRepository();
         }
         return sInstance;
     }
 
     private final Map<Integer, List<Bitmap>> mData = new HashMap<>();
+    private boolean initialized = false;
 
-    private ProductImageRepository(Context ctx) {
-        List<Bitmap> kpaBitmaps = new ArrayList<>();
-        kpaBitmaps.add(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.kpa1_small));
-        kpaBitmaps.add(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.kpa2_small));
-        kpaBitmaps.add(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.kpa3_small));
-        kpaBitmaps.add(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.kpa4_small));
-        kpaBitmaps.add(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.kpa5_small));
-        kpaBitmaps.add(BitmapFactory.decodeResource(ctx.getResources(), R.drawable.kpa6_small));
-        mData.put(1, kpaBitmaps);
+    private ProductImageRepository() {}
+
+    public @Nullable List<Bitmap> getImages(Context ctx, int mId, int height) {
+        if(!initialized) {
+            List<Bitmap> kpaBitmaps = new ArrayList<>();
+            kpaBitmaps.add(getScaledBitmap(ctx, R.drawable.kpa1_small, height));
+            kpaBitmaps.add(getScaledBitmap(ctx, R.drawable.kpa2_small, height));
+            kpaBitmaps.add(getScaledBitmap(ctx, R.drawable.kpa3_small, height));
+            kpaBitmaps.add(getScaledBitmap(ctx, R.drawable.kpa4_small, height));
+            kpaBitmaps.add(getScaledBitmap(ctx, R.drawable.kpa5_small, height));
+            kpaBitmaps.add(getScaledBitmap(ctx, R.drawable.kpa6_small, height));
+            mData.put(1, kpaBitmaps);
+            initialized = true;
+        }
+        return mData.get(mId);
     }
 
-    public @Nullable List<Bitmap> getImages(int mId) {
-        return mData.get(mId);
+    private Bitmap getScaledBitmap(Context ctx, int id, int height) {
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(ctx.getResources(), id, bmOptions);
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor;
+        if(height == 0) {
+            scaleFactor = 1;
+        } else {
+            scaleFactor = photoH/height;
+        }
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        return BitmapFactory.decodeResource(ctx.getResources(), id, bmOptions);
     }
 }

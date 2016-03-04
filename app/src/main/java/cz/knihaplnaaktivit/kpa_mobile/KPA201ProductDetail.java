@@ -65,7 +65,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
             mDescription.setText(mProduct.getDescription());
             mPrice.setText(Utils.getCurrencyFormat(mProduct.getPrice(), getString(R.string.currency)));
 
-            List<Bitmap> images = mProduct.fetchImages(this);
+            List<Bitmap> images = mProduct.fetchImages(this, 150);
             if(images.isEmpty()) {
                 mImageScrollWrapper.setVisibility(View.GONE);
             } else {
