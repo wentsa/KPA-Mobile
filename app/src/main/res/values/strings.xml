@@ -37,5 +37,14 @@
     <string name="description_empty_title">Prázdný popisek</string>
     <string name="description_empty_message">Sdělte nám prosím svůj příběh ohledně vybrané fotografie. Děkujeme.</string>
     <string name="ok">OK</string>
+    <string name="photo_upload">Nahrávání fotografie</string>
+    <string name="send_image_ok">Děkujeme. Fotografie bude nahrána.</string>
+    <string name="send_image_not_ok">Nepodařilo se zahájit nahrávání.</string>
+    <string name="send_image_not_ok2">Nepodařilo se nahrát fotografii.</string>
+    <string name="photo_upload_description">Fotografie je odesílána</string>
+    <string name="upload_fail_permission_not_granted">Nepodařilo se nahrát fotografii. Udělte prosím aplikaci potřebná oprávnění.</string>
+    <string name="upload_fail_not_found">Nepodařilo se nahrát fotografii. Zřejmě byla smazána.</string>
+    <string name="no_internet_title">Bez připojení</string>
+    <string name="no_internet_message">Pro odeslání fotografie se připojte k internetu</string>
 
 </resources>

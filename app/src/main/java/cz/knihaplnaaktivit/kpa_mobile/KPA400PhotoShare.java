@@ -58,7 +58,6 @@ public class KPA400PhotoShare extends AppCompatActivity {
     }
 
     private String mImagePath;
-    private Bitmap mImage;
 
     @Bind(R.id.thumbnail)
     ImageView mThumbnail;
@@ -170,7 +169,8 @@ public class KPA400PhotoShare extends AppCompatActivity {
      * API SEND
      */
     private void send() {
-        if(mImagePath != null && mImage != null) {
+        if(mImagePath != null) {
+            // validations
             String mail = mEmail.getText().toString();
             if(!Utils.isValidEmail(mail)) {
                 new AlertDialog.Builder(this)
@@ -191,7 +191,21 @@ public class KPA400PhotoShare extends AppCompatActivity {
                         .show();
                 return;
             }
-            ApiConnector.sendImage(mail, description, mImage);
+
+            // connection check
+            if(Utils.isOnline(this)) {
+                // image send
+                ApiConnector.sendImage(this, mail, description, mImagePath);
+                Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+            } else {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.no_internet_title))
+                        .setMessage(getString(R.string.no_internet_message))
+                        .setNeutralButton(R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
+                        .show();
+                return;
+            }
             finish();
         }
     }
@@ -263,19 +277,20 @@ public class KPA400PhotoShare extends AppCompatActivity {
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
+            if(cursor != null) {
+                cursor.moveToFirst();
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            mImagePath = cursor.getString(columnIndex);
-            cursor.close();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                mImagePath = cursor.getString(columnIndex);
+                cursor.close();
 
-            fillForm();
+                fillForm();
+            }
         }
     }
 
     private void fillForm() {
-        mImage = BitmapFactory.decodeFile(mImagePath);
-        mThumbnail.setImageBitmap(mImage);
+        mThumbnail.setImageBitmap(BitmapFactory.decodeFile(mImagePath));
 
         triggerContentVisibility();
     }

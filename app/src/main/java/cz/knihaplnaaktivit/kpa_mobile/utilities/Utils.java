@@ -1,5 +1,8 @@
 package cz.knihaplnaaktivit.kpa_mobile.utilities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import java.util.Collections;
@@ -132,6 +135,15 @@ public class Utils {
      */
     public final static boolean isValidEmail(CharSequence mail) {
         return !TextUtils.isEmpty(mail) && android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches();
+    }
+
+    /**
+     * Checks internet connection
+     */
+    public static boolean isOnline(Context ctx) {
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 
 
