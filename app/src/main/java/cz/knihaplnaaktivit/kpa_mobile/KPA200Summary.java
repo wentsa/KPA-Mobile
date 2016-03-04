@@ -24,6 +24,10 @@ public class KPA200Summary extends AppCompatActivity {
     @Bind(R.id.list)
     ExpandableListView mList;
 
+    private int mPrevExpanded = -1;
+
+    private KPA200ExpendableListAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +35,26 @@ public class KPA200Summary extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        List<Product> products = ProductRepository.getProducts();
-        mList.setAdapter(new KPA200ExpendableListAdapter(this, products));
+        List<Product> products = ProductRepository.getInstance().getProducts();
+        mAdapter = new KPA200ExpendableListAdapter(this, products);
+        mList.setAdapter(mAdapter);
 
+        // only one expanded at time
+        mList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(mPrevExpanded != -1 && mPrevExpanded != groupPosition) {
+                    mList.collapseGroup(mPrevExpanded);
+                }
+                mPrevExpanded = groupPosition;
+            }
+        });
+
+        // detail click
         mList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Product selectedItem = (Product) parent.getAdapter().getItem(groupPosition);
+                Product selectedItem = (Product) mAdapter.getGroup(groupPosition);
 
                 Intent intent = new Intent(KPA200Summary.this, KPA201ProductDetail.class);
                 intent.putExtra(KPA201ProductDetail.ITEM_ID_KEY, selectedItem.getId());

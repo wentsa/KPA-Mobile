@@ -15,9 +15,6 @@ import cz.knihaplnaaktivit.kpa_mobile.R;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
-/**
- * Created by wentsa on 03/03/2016.
- */
 public class KPA200ExpendableListAdapter extends BaseExpandableListAdapter {
 
     private final Context mContext;
@@ -108,4 +105,5 @@ public class KPA200ExpendableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="cz.knihaplnaaktivit.kpa_mobile.KPA400PhotoShare"
+    android:background="@drawable/activity_background">
+
+    <!-- dummy for focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
+    <ScrollView
+        android:id="@+id/content_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
+
+            <android.support.v7.widget.GridLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:columnCount="2"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/your_email"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/input_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@+id/input_description"
+                    android:nextFocusDown="@id/input_description"
+                    android:nextFocusLeft="@id/input_description"
+                    android:nextFocusRight="@id/input_description"
+                    android:nextFocusForward="@id/input_description"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description"
+                    android:layout_marginRight="10dp" />
+
+                <EditText
+                    android:id="@+id/input_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@id/input_email"
+                    android:nextFocusDown="@id/input_email"
+                    android:nextFocusLeft="@id/input_email"
+                    android:nextFocusRight="@id/input_email"
+                    android:nextFocusForward="@id/input_email"/>
+
+            </android.support.v7.widget.GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/placeholder_warning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/placeholder_warning"
+        android:gravity="center"
+        android:padding="25dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+</RelativeLayout>

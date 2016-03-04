@@ -1,5 +1,10 @@
 package cz.knihaplnaaktivit.kpa_mobile.utilities;
 
+import android.text.TextUtils;
+
+import java.util.Collections;
+import java.util.List;
+
 public class Utils {
 
     /**
@@ -113,6 +118,20 @@ public class Utils {
      */
     public static String getCurrencyFormatShortcutted(int val, String appender) {
         return Utils.formatCurrencyShortcutted(val) + " " + appender;
+    }
+
+    /**
+     * Transforms null into empty list.
+     */
+    public static <T> List<T> nullToEmpty(List<T> list) {
+        return list == null ? Collections.EMPTY_LIST : list;
+    }
+
+    /**
+     * Checks email validity
+     */
+    public final static boolean isValidEmail(CharSequence mail) {
+        return !TextUtils.isEmpty(mail) && android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches();
     }
 
 

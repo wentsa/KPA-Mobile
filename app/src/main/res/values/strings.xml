@@ -9,6 +9,7 @@
 
     <string name="title_activity_kpa200_summary">@string/dashboard_summary</string>
     <string name="title_activity_kpa201_product_detail">Detail produktu</string>
+    <string name="title_activity_kpa400_photo_share">@string/dashboard_share</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec vitae arcu. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Aliquam id dolor. Aliquam ornare wisi eu metus. Nulla pulvinar eleifend sem. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Integer malesuada. Aliquam erat volutpat. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Ut tempus purus at lorem. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         Donec iaculis gravida nulla. Mauris dictum facilisis augue. Suspendisse nisl. Etiam neque. Aenean vel massa quis mauris vehicula lacinia. Nunc tincidunt ante vitae massa. Etiam commodo dui eget wisi. Morbi scelerisque luctus velit. Nam quis nulla. Aliquam erat volutpat. Duis condimentum augue id magna semper rutrum. Quisque tincidunt scelerisque libero. Aliquam erat volutpat. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Nam quis nulla. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Fusce tellus. Etiam commodo dui eget wisi. Cras pede libero, dapibus nec, pretium sit amet, tempor quis.
@@ -18,5 +19,23 @@
     </string>
 
     <string name="currency">Kč</string>
+    <string name="show_on_web">Přejít na web</string>
+    <string name="send">Odeslat</string>
+    <string name="your_email">Váš email</string>
+    <string name="description">Popisek</string>
+
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+
+    <string name="permission_explanation_title">Používání fotoaparátu</string>
+    <string name="permission_explanation_message">Pro sdílení Vašich fotografií je nutné nejprve přidělit příslušná oprávnění. Přejete si tak udělat?</string>
+    <string name="browse">Procházet</string>
+    <string name="camera">Vyfotit</string>
+    <string name="placeholder_warning">Vyberte prosím Vaši fotografii nebo vyfoťte novou.</string>
+    <string name="email_invalid_title">Neplatný email</string>
+    <string name="email_invalid_message">Zadejte prosím platnou emailovou adresu</string>
+    <string name="description_empty_title">Prázdný popisek</string>
+    <string name="description_empty_message">Sdělte nám prosím svůj příběh ohledně vybrané fotografie. Děkujeme.</string>
+    <string name="ok">OK</string>
 
 </resources>

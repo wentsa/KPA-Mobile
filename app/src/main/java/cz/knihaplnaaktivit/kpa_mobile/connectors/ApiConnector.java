@@ -1,14 +1,10 @@
 package cz.knihaplnaaktivit.kpa_mobile.connectors;
 
-import java.util.List;
+import android.graphics.Bitmap;
 
 public class ApiConnector {
 
-    public static <T> List<T> get(Type products, Object ... params) {
-        return null;
-    }
+    public static void sendImage(String mail, String description, Bitmap image) {
 
-    public enum Type {
-        PRODUCTS
     }
 }

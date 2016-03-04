@@ -2,10 +2,13 @@ package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 public class KPA100Dashboard extends AppCompatActivity {
 
@@ -15,10 +18,20 @@ public class KPA100Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_kpa100_dashboard);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        View button = findViewById(R.id.btn_share_photo);
+        if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            button.setVisibility(View.VISIBLE);
+        } else {
+            button.setVisibility(View.GONE);
+        }
+    }
+
     public void onBtnSummaryClicked(View v) {
-        Intent intent = new Intent(this, KPA200Summary.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_down, R.anim.stay);
+        navigate(KPA200Summary.class);
     }
 
     public void onBtnContactUsClicked(View v) {
@@ -26,9 +39,23 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
     public void onBtnSharePhotoClicked(View v) {
-
+        navigate(KPA400PhotoShare.class);
+        /*
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }*/
     }
-
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
+        }
+    }
+*/
     public void onBtnAboutClicked(View v) {
 
     }
@@ -47,5 +74,11 @@ public class KPA100Dashboard extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl)));
         }
+    }
+
+    private void navigate(Class cls) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_down, R.anim.stay);
     }
 }
