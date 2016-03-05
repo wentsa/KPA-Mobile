@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
@@ -51,8 +52,11 @@ public class ServiceSendImage extends IntentService {
 
     private static final int NOTIFICATION_ID = 1;
 
+    private final Handler mHandler;
+
     public ServiceSendImage() {
         super("KPA_ServiceSendImage");
+        mHandler = new Handler();
     }
 
     @Override
@@ -70,7 +74,7 @@ public class ServiceSendImage extends IntentService {
                 if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     image = new File(imagePath);
                     if(!image.exists()) {
-                        Toast.makeText(ServiceSendImage.this, getString(R.string.upload_fail_not_found), Toast.LENGTH_SHORT).show();
+                        toast(getString(R.string.upload_fail_not_found));
                     }
                 } else {
                     failPermission();
@@ -93,8 +97,7 @@ public class ServiceSendImage extends IntentService {
                     imageEncoded = new String(o.toByteArray(), "UTF-8");
                     o.close();
                 } catch (IOException e) {
-                    // FIXME toasty nefungujou
-                    Toast.makeText(ServiceSendImage.this, getString(R.string.send_image_not_ok2), Toast.LENGTH_SHORT).show();
+                    toast(getString(R.string.send_image_not_ok2));
                     return;
                 }
 
@@ -109,12 +112,12 @@ public class ServiceSendImage extends IntentService {
                 Network.doPost("send_photo.php", params);
             }
         } catch (Exception e) {
-            Toast.makeText(ServiceSendImage.this, getString(R.string.send_image_not_ok2), Toast.LENGTH_SHORT).show();
+            toast(getString(R.string.send_image_not_ok2));
         }
     }
 
     private void failPermission() {
-        Toast.makeText(ServiceSendImage.this, getString(R.string.upload_fail_permission_not_granted), Toast.LENGTH_SHORT).show();
+        toast(getString(R.string.upload_fail_permission_not_granted));
     }
 
     private void createNotification() {
@@ -132,5 +135,21 @@ public class ServiceSendImage extends IntentService {
                 .build();
 
         startForeground(NOTIFICATION_ID, notification);
+    }
+
+    private void toast(String msg) {
+        mHandler.post(new DisplayToast(msg));
+    }
+
+    private class DisplayToast implements Runnable {
+        private final String mText;
+
+        public DisplayToast(String text){
+            mText = text;
+        }
+
+        public void run(){
+            Toast.makeText(ServiceSendImage.this, mText, Toast.LENGTH_SHORT).show();
+        }
     }
 }
