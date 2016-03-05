@@ -3,8 +3,8 @@
     <string name="app_name_shortcut">KPA</string>
 
     <string name="dashboard_summary">Přehled pomůcek</string>
-    <string name="dashboard_contact">Kontaktovat</string>
-    <string name="dashboard_share">Sdílet foto</string>
+    <string name="dashboard_contact">Napište nám</string>
+    <string name="dashboard_share">Sdílejte foto</string>
     <string name="dashboard_about">O nás</string>
 
     <string name="title_activity_kpa200_summary">@string/dashboard_summary</string>
@@ -36,6 +36,8 @@
     <string name="email_invalid_message">Zadejte prosím platnou emailovou adresu</string>
     <string name="description_empty_title">Prázdný popisek</string>
     <string name="description_empty_message">Sdělte nám prosím svůj příběh ohledně vybrané fotografie. Děkujeme.</string>
+    <string name="name_empty_title">Prázdné jméno</string>
+    <string name="name_empty_message">Uveďte prosím své jméno</string>
     <string name="ok">OK</string>
     <string name="photo_upload">Nahrávání fotografie</string>
     <string name="send_image_ok">Děkujeme. Fotografie bude nahrána.</string>
@@ -46,5 +48,9 @@
     <string name="upload_fail_not_found">Nepodařilo se nahrát fotografii. Zřejmě byla smazána.</string>
     <string name="no_internet_title">Bez připojení</string>
     <string name="no_internet_message">Pro odeslání fotografie se připojte k internetu</string>
+    <string name="your_name">Vaše jméno</string>
+    <string name="no_wifi_title">Žádná wifi</string>
+    <string name="no_wifi_message">Pro odesílání fotografie doporučujeme používat wifi připojení. Přejete si pokračovat?</string>
+
 
 </resources>

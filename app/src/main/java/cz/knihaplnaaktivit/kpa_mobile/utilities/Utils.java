@@ -1,8 +1,10 @@
 package cz.knihaplnaaktivit.kpa_mobile.utilities;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.*;
+import android.net.Network;
 import android.text.TextUtils;
 
 import java.util.Collections;
@@ -144,6 +146,90 @@ public class Utils {
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnected();
+    }
+
+    /**
+     * Checks if user is connected via wifi
+     */
+    public static boolean isWifiConnected(Context ctx) {
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Network[] networks = cm.getAllNetworks();
+            for(Network n : networks) {
+                NetworkInfo ni = cm.getNetworkInfo(n);
+                if(ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI && ni.isConnected()) {
+                    return true;
+                }
+            }
+        } else {
+            NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if(ni != null && ni.isConnected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Loads bitmap and scales to fit width and height
+     * @param ctx context
+     * @param id drawable id
+     * @param width width to fit or 0 to ignore
+     * @param height height to fit or 0 to ignore
+     * @return scaled bitmap
+     */
+    public static Bitmap getScaledBitmap(Context ctx, int id, int width, int height) {
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(ctx.getResources(), id, bmOptions);
+        int photoH = bmOptions.outHeight;
+        int photoW = bmOptions.outWidth;
+
+        // Determine how much to scale down the image
+        int scaleFactor = getScaleFactor(photoW, photoH, width, height);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        return BitmapFactory.decodeResource(ctx.getResources(), id, bmOptions);
+    }
+
+    /**
+     * @param path file path
+     * @see #getScaledBitmap(Context, int, int, int)
+     */
+    public static Bitmap getScaledBitmap(String path, int width, int height) {
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+        int photoH = bmOptions.outHeight;
+        int photoW = bmOptions.outWidth;
+
+        // Determine how much to scale down the image
+        int scaleFactor = getScaleFactor(photoW, photoH, width, height);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        return BitmapFactory.decodeFile(path, bmOptions);
+    }
+
+    private static int getScaleFactor(int pWidth, int pHeight, int width, int height) {
+        if(height == 0 && width == 0) {
+            return 1;
+        } else if(width == 0) {
+            return pHeight/height;
+        } else if(height == 0) {
+            return pWidth/width;
+        } else {
+            return Math.min(pHeight/height, pWidth/width);
+        }
     }
 
 

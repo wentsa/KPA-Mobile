@@ -31,6 +31,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +44,7 @@ import cz.knihaplnaaktivit.kpa_mobile.utilities.Network;
 
 public class ServiceSendImage extends IntentService {
 
+    public static final String NAME = "name";
     public static final String EMAIL = "email";
     public static final String DESCRIPTION = "description";
     public static final String IMAGE = "image";
@@ -57,6 +60,7 @@ public class ServiceSendImage extends IntentService {
         try {
             Bundle extras = intent.getExtras();
             if(extras != null) {
+                String name = extras.getString(NAME);
                 String mail = extras.getString(EMAIL);
                 String description = extras.getString(DESCRIPTION);
                 String imagePath = extras.getString(IMAGE);
@@ -80,22 +84,27 @@ public class ServiceSendImage extends IntentService {
                 try {
                     ByteArrayOutputStream o = new ByteArrayOutputStream();
                     InputStream is = new FileInputStream(image);
-                    OutputStream out = new Base64OutputStream(o, Base64.DEFAULT);
+
+                    // must be URL safe and then decoded properly on server side
+                    OutputStream out = new Base64OutputStream(o, Base64.URL_SAFE);
                     IOUtils.copy(is, out);
                     is.close();
                     out.close();
-                    imageEncoded = o.toString("UTF-8");
+                    imageEncoded = new String(o.toByteArray(), "UTF-8");
                     o.close();
                 } catch (IOException e) {
+                    // FIXME toasty nefungujou
                     Toast.makeText(ServiceSendImage.this, getString(R.string.send_image_not_ok2), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Map<String, String> params = new HashMap<>();
 
+                params.put("name", name);
                 params.put("email", mail);
                 params.put("description", description);
                 params.put("image", imageEncoded);
+                params.put("filename", image.getName());
 
                 Network.doPost("send_photo.php", params);
             }

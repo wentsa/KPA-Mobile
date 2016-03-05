@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -61,6 +62,9 @@ public class KPA400PhotoShare extends AppCompatActivity {
 
     @Bind(R.id.thumbnail)
     ImageView mThumbnail;
+
+    @Bind(R.id.input_name)
+    EditText mName;
 
     @Bind(R.id.input_email)
     EditText mEmail;
@@ -171,7 +175,17 @@ public class KPA400PhotoShare extends AppCompatActivity {
     private void send() {
         if(mImagePath != null) {
             // validations
-            String mail = mEmail.getText().toString();
+            final String name = mName.getText().toString();
+            if(TextUtils.isEmpty(name)) {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.name_empty_title))
+                        .setMessage(getString(R.string.name_empty_message))
+                        .setNeutralButton(R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
+                        .show();
+                return;
+            }
+            final String mail = mEmail.getText().toString();
             if(!Utils.isValidEmail(mail)) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.email_invalid_title))
@@ -181,7 +195,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
                         .show();
                 return;
             }
-            String description = mDescription.getText().toString();
+            final String description = mDescription.getText().toString();
             if(TextUtils.isEmpty(description)) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.description_empty_title))
@@ -195,8 +209,29 @@ public class KPA400PhotoShare extends AppCompatActivity {
             // connection check
             if(Utils.isOnline(this)) {
                 // image send
-                ApiConnector.sendImage(this, mail, description, mImagePath);
-                Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+                if(!Utils.isWifiConnected(this)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.no_wifi_title))
+                            .setMessage(getString(R.string.no_wifi_message))
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ApiConnector.sendImage(KPA400PhotoShare.this, name, mail, description, mImagePath);
+                                    Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {}
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
+                            .show();
+                } else {
+                    ApiConnector.sendImage(this, name, mail, description, mImagePath);
+                    Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             } else {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.no_internet_title))
@@ -204,9 +239,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
                         .setNeutralButton(R.string.ok, null)
                         .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
                         .show();
-                return;
             }
-            finish();
         }
     }
 
@@ -290,7 +323,10 @@ public class KPA400PhotoShare extends AppCompatActivity {
     }
 
     private void fillForm() {
-        mThumbnail.setImageBitmap(BitmapFactory.decodeFile(mImagePath));
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        mThumbnail.setImageBitmap(Utils.getScaledBitmap(mImagePath, metrics.widthPixels, 0));
 
         triggerContentVisibility();
     }

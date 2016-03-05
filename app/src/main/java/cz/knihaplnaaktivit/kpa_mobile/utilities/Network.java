@@ -6,8 +6,11 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,6 +43,9 @@ public class Network {
         return response.toString();
     }
 
+    /**
+     *
+     */
     public static String doPost(String context, Map<String, String>  params) throws IOException {
         URL obj = new URL(sBaseUrl + context);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -51,10 +57,15 @@ public class Network {
 
         // Send post request
         con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        OutputStream cos = con.getOutputStream();
+        DataOutputStream wr = new DataOutputStream(cos);
         wr.writeBytes(urlParameters);
+        int totalBytes = wr.size();
         wr.flush();
         wr.close();
+        cos.close();
+
+
 
         int responseCode = con.getResponseCode();
 
@@ -70,17 +81,27 @@ public class Network {
         return response.toString();
     }
 
+    /**
+     * Creates p1=val1&p2=val2 like string
+     */
     private static String buildParameters(Map<String, String>  params) {
         StringBuilder sb = new StringBuilder();
         if(params != null) {
             Set<String> keys = params.keySet();
             boolean first = true;
             for (String key : keys) {
-                if (!first) {
+                try {
+                    if (!first) {
+                        sb.append("&");
+                    }
+                    sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
+                    first = false;
+                } catch (UnsupportedEncodingException e) {}
+                /*if (!first) {
                     sb.append("&");
                 }
                 sb.append(key).append("=").append(params.get(key));
-                first = false;
+                first = false;*/
             }
         }
         return sb.toString();

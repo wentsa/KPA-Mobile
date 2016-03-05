@@ -46,6 +46,24 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/your_name"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/input_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@+id/input_description"
+                    android:nextFocusDown="@id/input_description"
+                    android:nextFocusLeft="@id/input_description"
+                    android:nextFocusRight="@id/input_description"
+                    android:nextFocusForward="@id/input_description"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/your_email"
                     android:layout_marginRight="10dp"/>
 
