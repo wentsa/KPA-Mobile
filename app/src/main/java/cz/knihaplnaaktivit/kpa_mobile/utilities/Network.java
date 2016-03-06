@@ -18,6 +18,8 @@ public class Network {
 
     private static final String sBaseUrl = "http://knihaplnaaktivit.cz/api/";
 
+    private static final int TIMEOUT = 1000 * 60 * 5; // 5 min
+
     public static String doGet(String context, Map<String, String> params) throws IOException {
         String paramsBuilded = buildParameters(params);
         if(!TextUtils.isEmpty(paramsBuilded)) {
@@ -27,6 +29,7 @@ public class Network {
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
         con.setRequestMethod("GET");
+        con.setReadTimeout(TIMEOUT);
 
         // int responseCode = con.getResponseCode();
 
@@ -52,6 +55,7 @@ public class Network {
 
         //add reuqest header
         con.setRequestMethod("POST");
+        con.setReadTimeout(TIMEOUT);
 
         String urlParameters = buildParameters(params);
 
@@ -97,11 +101,6 @@ public class Network {
                     sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
                     first = false;
                 } catch (UnsupportedEncodingException e) {}
-                /*if (!first) {
-                    sb.append("&");
-                }
-                sb.append(key).append("=").append(params.get(key));
-                first = false;*/
             }
         }
         return sb.toString();

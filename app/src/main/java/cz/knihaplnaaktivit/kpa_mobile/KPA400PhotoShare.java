@@ -45,7 +45,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
 
     private enum PermissionRequestType {
 
-        WRITE_EXTERNAL_STORAGE_TAKE(1), WRITE_EXTERNAL_STORAGE_BROWSE(2);
+        WRITE_EXTERNAL_STORAGE_TAKE(1), WRITE_EXTERNAL_STORAGE_BROWSE(2), WRITE_EXTERNAL_STORAGE_SEND(3);
 
         private final int mCode;
 
@@ -208,29 +208,35 @@ public class KPA400PhotoShare extends AppCompatActivity {
 
             // connection check
             if(Utils.isOnline(this)) {
-                // image send
-                if(!Utils.isWifiConnected(this)) {
-                    new AlertDialog.Builder(this)
-                            .setTitle(getString(R.string.no_wifi_title))
-                            .setMessage(getString(R.string.no_wifi_message))
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ApiConnector.sendImage(KPA400PhotoShare.this, name, mail, description, mImagePath);
-                                    Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {}
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
-                            .show();
+                // does app have permission?
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    // image send
+                    if(!Utils.isWifiConnected(this)) {
+                        new AlertDialog.Builder(this)
+                                .setTitle(getString(R.string.no_wifi_title))
+                                .setMessage(getString(R.string.no_wifi_message))
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ApiConnector.sendImage(KPA400PhotoShare.this, name, mail, description, mImagePath);
+                                        Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
+                                .show();
+                    } else {
+                        ApiConnector.sendImage(this, name, mail, description, mImagePath);
+                        Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 } else {
-                    ApiConnector.sendImage(this, name, mail, description, mImagePath);
-                    Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
-                    finish();
+                    promptForPermission(PermissionRequestType.WRITE_EXTERNAL_STORAGE_SEND);
                 }
             } else {
                 new AlertDialog.Builder(this)
@@ -287,6 +293,10 @@ public class KPA400PhotoShare extends AppCompatActivity {
         } else if(requestCode == PermissionRequestType.WRITE_EXTERNAL_STORAGE_BROWSE.getCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 browse();
+            }
+        } else if(requestCode == PermissionRequestType.WRITE_EXTERNAL_STORAGE_SEND.getCode()) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                send();
             }
         }
     }
