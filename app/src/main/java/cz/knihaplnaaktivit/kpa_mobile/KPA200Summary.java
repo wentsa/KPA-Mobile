@@ -35,7 +35,7 @@ public class KPA200Summary extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        List<Product> products = ProductRepository.getInstance().getProducts();
+        List<Product> products = ProductRepository.getInstance(this).getProducts();
         mAdapter = new KPA200ExpendableListAdapter(this, products);
         mList.setAdapter(mAdapter);
 

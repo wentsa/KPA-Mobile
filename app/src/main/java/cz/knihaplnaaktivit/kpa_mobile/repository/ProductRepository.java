@@ -1,27 +1,53 @@
 package cz.knihaplnaaktivit.kpa_mobile.repository;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
+import cz.knihaplnaaktivit.kpa_mobile.utilities.Constants;
 
 public class ProductRepository {
 
+    private static final String FILE_NAME = "KPA_products";
+
+    private final String JSON_ID            = "id";
+    private final String JSON_NAME          = "name";
+    private final String JSON_DESCRIPTION   = "description";
+    private final String JSON_PRICE         = "price";
+    private final String JSON_URL           = "url";
+
     private static ProductRepository sInstance;
 
-    public static synchronized ProductRepository getInstance() {
+    public static synchronized ProductRepository getInstance(Context ctx) {
         if(sInstance == null) {
-            sInstance = new ProductRepository();
+            sInstance = new ProductRepository(ctx);
         }
         return sInstance;
     }
 
     private final List<Product> mData = new ArrayList<>();
+    private final Context mCtx;
+    private boolean mInitialized = false;
 
-    private ProductRepository() {
-        mData.add(new Product(
+    private ProductRepository(Context ctx) {
+        mCtx = ctx;
+        /*mData.add(new Product(
                 1,
                 "Kniha plná aktivit",
                 "Nabízíme vám ručně vyráběnou Knihu plnou aktivit, která je určena dětem od 3 let, avšak některé úkoly zvládají i mladší děti.\n" +
@@ -62,14 +88,20 @@ public class ProductRepository {
         mData.add(new Product(5, "Pomucka 2", "Popis", 100, ""));
         mData.add(new Product(6, "Pomucka 3", "Popis", 100, ""));
         mData.add(new Product(7, "Pomucka 4", "Popis", 100, ""));
-        mData.add(new Product(8, "Pomucka 5", "Popis", 100, ""));
+        mData.add(new Product(8, "Pomucka 5", "Popis", 100, ""));*/
     }
 
     public List<Product> getProducts() {
+        if(!mInitialized) {
+            initialize();
+        }
         return mData;
     }
 
     public @Nullable Product getProduct(int id) {
+        if(!mInitialized) {
+            initialize();
+        }
         for(Product p : mData) {
             if(p.getId() == id) {
                 return p;
@@ -77,4 +109,43 @@ public class ProductRepository {
         }
         return null;
     }
+
+    private void initialize() {
+        SQLiteDatabase db = new KPADatabase(mCtx).getReadableDatabase();
+
+        String[] projection = {KPADatabase.ProductColumns._ID,
+                KPADatabase.ProductColumns.COLUMN_NAME_NAME,
+                KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION,
+                KPADatabase.ProductColumns.COLUMN_NAME_PRICE,
+                KPADatabase.ProductColumns.COLUMN_NAME_URL
+        };
+
+        Cursor c = db.query(
+                KPADatabase.ProductColumns.TABLE_NAME,  // The table to query
+                projection,                             // The columns to return
+                null,                                   // The columns for the WHERE clause
+                null,                                   // The values for the WHERE clause
+                null,                                   // don't group the rows
+                null,                                   // don't filter by row groups
+                null                                    // The sort order
+        );
+
+        if(c.moveToFirst()) {
+            do {
+                int id              = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns._ID));
+                String name         = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_NAME));
+                String description  = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION));
+                int price           = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_PRICE));
+                String url          = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_URL));
+
+                mData.add(new Product(id, name, description, price, url));
+            } while (c.moveToNext());
+        }
+
+        c.close();
+
+        mInitialized = true;
+    }
+
+
 }

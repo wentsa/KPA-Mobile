@@ -9,7 +9,9 @@
 
     <string name="title_activity_kpa200_summary">@string/dashboard_summary</string>
     <string name="title_activity_kpa201_product_detail">Detail produktu</string>
+    <string name="title_activity_kpa300_contact_us">@string/dashboard_contact</string>
     <string name="title_activity_kpa400_photo_share">@string/dashboard_share</string>
+    <string name="title_activity_kpa500_about">@string/dashboard_about</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec vitae arcu. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Aliquam id dolor. Aliquam ornare wisi eu metus. Nulla pulvinar eleifend sem. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Integer malesuada. Aliquam erat volutpat. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Ut tempus purus at lorem. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         Donec iaculis gravida nulla. Mauris dictum facilisis augue. Suspendisse nisl. Etiam neque. Aenean vel massa quis mauris vehicula lacinia. Nunc tincidunt ante vitae massa. Etiam commodo dui eget wisi. Morbi scelerisque luctus velit. Nam quis nulla. Aliquam erat volutpat. Duis condimentum augue id magna semper rutrum. Quisque tincidunt scelerisque libero. Aliquam erat volutpat. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Nam quis nulla. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Fusce tellus. Etiam commodo dui eget wisi. Cras pede libero, dapibus nec, pretium sit amet, tempor quis.
@@ -31,13 +33,17 @@
     <string name="permission_explanation_message">Pro sdílení Vašich fotografií je nutné nejprve přidělit příslušná oprávnění. Přejete si tak udělat?</string>
     <string name="browse">Procházet</string>
     <string name="camera">Vyfotit</string>
-    <string name="placeholder_warning">Vyberte prosím Vaši fotografii nebo vyfoťte novou.</string>
+    <string name="placeholder_warning">Sdílejte s námi své zážitky, které jste prožili při práci s našimi pomůckami. Vyberte prosím Vaši fotografii nebo vyfoťte novou.</string>
     <string name="email_invalid_title">Neplatný email</string>
     <string name="email_invalid_message">Zadejte prosím platnou emailovou adresu</string>
     <string name="description_empty_title">Prázdný popisek</string>
     <string name="description_empty_message">Sdělte nám prosím svůj příběh ohledně vybrané fotografie. Děkujeme.</string>
     <string name="name_empty_title">Prázdné jméno</string>
     <string name="name_empty_message">Uveďte prosím své jméno</string>
+    <string name="subject_empty_title">Prázdný předmět</string>
+    <string name="subject_empty_message">Zadejte prosím předmět zprávy</string>
+    <string name="message_empty_title">Prázdná zpráva</string>
+    <string name="message_empty_message">Vyplňte prosím Vaši zprávu</string>
     <string name="ok">OK</string>
     <string name="photo_upload">Nahrávání fotografie</string>
     <string name="send_image_ok">Děkujeme. Fotografie bude nahrána.</string>
@@ -47,10 +53,23 @@
     <string name="upload_fail_permission_not_granted">Nepodařilo se nahrát fotografii. Udělte prosím aplikaci potřebná oprávnění.</string>
     <string name="upload_fail_not_found">Nepodařilo se nahrát fotografii. Zřejmě byla smazána.</string>
     <string name="no_internet_title">Bez připojení</string>
-    <string name="no_internet_message">Pro odeslání fotografie se připojte k internetu</string>
+    <string name="no_internet_message">Pro odeslání fotografie se připojte k internetu.</string>
     <string name="your_name">Vaše jméno</string>
     <string name="no_wifi_title">Žádná wifi</string>
     <string name="no_wifi_message">Pro odesílání fotografie doporučujeme používat wifi připojení. Přejete si pokračovat?</string>
+    <string name="subject">Předmět</string>
+    <string name="text">Text</string>
+    <string name="your_message">Vaše zpráva</string>
+
+    <string name="send_message_ok">Děkujeme. Vaše zpráva bude odeslána.</string>
+    <string name="no_internet_message_message">Pro odeslání zprávy se připojte k internetu.</string>
+    <string name="send_message_not_ok">Nepodařilo se odeslat zprávu</string>
+    <string name="message_upload">Odesílání zprávy</string>
+    <string name="message_upload_description">Zpráva se právě odesílá</string>
+    <string name="contact">Ing. Michaela Fürstová\nČajkovského 21\nŘíčany, 251 01\nIČ: 03746861 (Podnikatel zapsán v živnostenském rejstříku MÚ Říčany)</string>
+    <string name="facebook_page">Facebooková stránka</string>
+    <string name="facebook_group">Facebooková skupina</string>
+    <string name="no_mail_client">Nenalezen žádný emailový klient. Adresa zkopírována do schránky.</string>
 
 
 </resources>

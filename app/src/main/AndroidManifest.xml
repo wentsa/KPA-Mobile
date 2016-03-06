@@ -21,6 +21,10 @@
             android:exported="false"
             android:icon="@drawable/ic_upload_black_24dp"
             android:label="@string/photo_upload"/>
+        <service android:name=".connectors.services.ServiceSendMessage"
+            android:exported="false"
+            android:icon="@drawable/ic_upload_black_24dp"
+            android:label="@string/message_upload"/>
 
         <activity android:name=".KPA100Dashboard">
             <intent-filter>
@@ -46,8 +50,24 @@
                 android:value="cz.knihaplnaaktivit.kpa_mobile.KPA200Summary" />
         </activity>
         <activity
+            android:name=".KPA300ContactUs"
+            android:label="@string/title_activity_kpa300_contact_us"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
+        </activity>
+        <activity
             android:name=".KPA400PhotoShare"
             android:label="@string/title_activity_kpa400_photo_share"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
+        </activity>
+        <activity
+            android:name=".KPA500About"
+            android:label="@string/title_activity_kpa500_about"
             android:parentActivityName=".KPA100Dashboard">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

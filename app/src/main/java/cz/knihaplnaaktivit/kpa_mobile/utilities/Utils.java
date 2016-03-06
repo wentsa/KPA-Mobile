@@ -1,6 +1,9 @@
 package cz.knihaplnaaktivit.kpa_mobile.utilities;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.*;
@@ -229,6 +232,32 @@ public class Utils {
             return pWidth/width;
         } else {
             return Math.min(pHeight/height, pWidth/width);
+        }
+    }
+
+    /**
+     * Starts facebook application if available. Otherwise start web browser
+     * @param ctx app context
+     * @param fbContext part of facebook url (facebook.com/{fbContext})
+     * @param facebookId facebook ID
+     * @param isPage true if page, falsi if group
+     */
+    public static void visitFacebook(Context ctx, String fbContext, String facebookId, boolean isPage) {
+        String facebookUrl = "https://www.facebook.com/" + fbContext;
+        try {
+            int versionCode = ctx.getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) {
+                Uri uri = Uri.parse("fb://facewebmodal/f?href=" + facebookUrl);
+                ctx.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            } else {
+                if(isPage) {
+                    ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + facebookId)));
+                } else {
+                    ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://group/" + facebookId)));
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl)));
         }
     }
 

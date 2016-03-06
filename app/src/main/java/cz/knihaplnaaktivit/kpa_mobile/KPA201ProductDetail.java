@@ -59,7 +59,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
     }
 
     private void loadProductDetail() {
-        mProduct = ProductRepository.getInstance().getProduct(mProductId);
+        mProduct = ProductRepository.getInstance(this).getProduct(mProductId);
         if(mProduct != null) {
             setTitle(mProduct.getName());
             mDescription.setText(mProduct.getDescription());

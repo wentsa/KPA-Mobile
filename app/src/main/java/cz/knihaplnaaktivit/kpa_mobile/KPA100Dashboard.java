@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
+
 public class KPA100Dashboard extends AppCompatActivity {
 
     @Override
@@ -35,45 +37,19 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
     public void onBtnContactUsClicked(View v) {
-
+        navigate(KPA300ContactUs.class);
     }
 
     public void onBtnSharePhotoClicked(View v) {
         navigate(KPA400PhotoShare.class);
-        /*
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }*/
     }
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
-        }
-    }
-*/
-    public void onBtnAboutClicked(View v) {
 
+    public void onBtnAboutClicked(View v) {
+        navigate(KPA500About.class);
     }
 
     public void onBtnFacebookClicked(View v) {
-        String facebookUrl = "https://www.facebook.com/www.knihaplnaaktivit.cz";
-        String facebookId = "1552685675006861";
-        try {
-            int versionCode = getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
-            if (versionCode >= 3002850) {
-                Uri uri = Uri.parse("fb://facewebmodal/f?href=" + facebookUrl);
-                startActivity(new Intent(Intent.ACTION_VIEW, uri));
-            } else {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + facebookId)));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl)));
-        }
+        Utils.visitFacebook(this, "www.knihaplnaaktivit.cz", "1552685675006861", true);
     }
 
     private void navigate(Class cls) {

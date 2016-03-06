@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="cz.knihaplnaaktivit.kpa_mobile.KPA300ContactUs"
+    android:background="@drawable/activity_background">
+
+    <!-- dummy for focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <android.support.v7.widget.GridLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:columnCount="2"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/your_name"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/input_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@+id/input_message"
+                    android:nextFocusDown="@+id/input_email"
+                    android:nextFocusLeft="@id/input_message"
+                    android:nextFocusRight="@+id/input_email"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/your_email"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/input_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@+id/input_name"
+                    android:nextFocusDown="@+id/input_subject"
+                    android:nextFocusLeft="@id/input_name"
+                    android:nextFocusRight="@id/input_subject"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subject"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/input_subject"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@+id/input_email"
+                    android:nextFocusDown="@id/input_message"
+                    android:nextFocusLeft="@id/input_email"
+                    android:nextFocusRight="@id/input_message"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/your_message"
+                    android:layout_marginRight="10dp" />
+
+                <EditText
+                    android:id="@+id/input_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    app:layout_columnWeight="1"
+                    android:nextFocusUp="@id/input_subject"
+                    android:nextFocusDown="@id/input_name"
+                    android:nextFocusLeft="@id/input_subject"
+                    android:nextFocusRight="@id/input_name"/>
+
+            </android.support.v7.widget.GridLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
