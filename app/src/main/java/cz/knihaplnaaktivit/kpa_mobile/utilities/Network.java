@@ -1,5 +1,7 @@
 package cz.knihaplnaaktivit.kpa_mobile.utilities;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -20,75 +22,80 @@ public class Network {
 
     private static final int TIMEOUT = 1000 * 60 * 5; // 5 min
 
-    public static String doGet(String context, Map<String, String> params) throws IOException {
-        String paramsBuilded = buildParameters(params);
-        if(!TextUtils.isEmpty(paramsBuilded)) {
-            paramsBuilded = "?" + paramsBuilded;
+
+    public static String doGet(@NonNull String context, @Nullable Map<String, String> params) throws IOException {
+        if(!Utils.isMainThread()) {
+            String paramsBuilded = buildParameters(params);
+            if (!TextUtils.isEmpty(paramsBuilded)) {
+                paramsBuilded = "?" + paramsBuilded;
+            }
+            URL obj = new URL(sBaseUrl + context + paramsBuilded);
+
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setReadTimeout(TIMEOUT);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            return response.toString();
         }
-        URL obj = new URL(sBaseUrl + context + paramsBuilded);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-        con.setRequestMethod("GET");
-        con.setReadTimeout(TIMEOUT);
-
-        // int responseCode = con.getResponseCode();
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        return response.toString();
+        return null;
     }
 
     /**
      *
      */
-    public static String doPost(String context, Map<String, String>  params) throws IOException {
-        URL obj = new URL(sBaseUrl + context);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+    public static String doPost(@NonNull String context, @Nullable Map<String, String>  params) throws IOException {
+        if(!Utils.isMainThread()) {
+            URL obj = new URL(sBaseUrl + context);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        //add reuqest header
-        con.setRequestMethod("POST");
-        con.setReadTimeout(TIMEOUT);
+            //add reuqest header
+            con.setRequestMethod("POST");
+            con.setReadTimeout(TIMEOUT);
 
-        String urlParameters = buildParameters(params);
+            String urlParameters = buildParameters(params);
 
-        // Send post request
-        con.setDoOutput(true);
-        OutputStream cos = con.getOutputStream();
-        DataOutputStream wr = new DataOutputStream(cos);
-        wr.writeBytes(urlParameters);
-        int totalBytes = wr.size();
-        wr.flush();
-        wr.close();
-        cos.close();
+            // Send post request
+            con.setDoOutput(true);
+            OutputStream cos = con.getOutputStream();
+            DataOutputStream wr = new DataOutputStream(cos);
+            wr.writeBytes(urlParameters);
+            int totalBytes = wr.size();
+            wr.flush();
+            wr.close();
+            cos.close();
 
 
+            int responseCode = con.getResponseCode();
 
-        int responseCode = con.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+            return response.toString();
         }
-        in.close();
-
-        return response.toString();
+        return null;
     }
 
     /**
      * Creates p1=val1&p2=val2 like string
      */
-    private static String buildParameters(Map<String, String>  params) {
+    private static String buildParameters(@Nullable Map<String, String>  params) {
         StringBuilder sb = new StringBuilder();
         if(params != null) {
             Set<String> keys = params.keySet();

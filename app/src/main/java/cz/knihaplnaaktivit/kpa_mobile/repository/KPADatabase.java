@@ -9,7 +9,7 @@ import cz.knihaplnaaktivit.kpa_mobile.utilities.Constants;
 
 public class KPADatabase extends SQLiteOpenHelper {
 
-    protected KPADatabase(Context ctx) {
+    public KPADatabase(Context ctx) {
         super(ctx, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
     }
 

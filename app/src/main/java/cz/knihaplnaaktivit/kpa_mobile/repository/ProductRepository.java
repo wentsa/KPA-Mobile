@@ -3,24 +3,14 @@ package cz.knihaplnaaktivit.kpa_mobile.repository;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
-import cz.knihaplnaaktivit.kpa_mobile.utilities.Constants;
+import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class ProductRepository {
 
@@ -111,6 +101,8 @@ public class ProductRepository {
     }
 
     private void initialize() {
+        mData.clear();
+
         SQLiteDatabase db = new KPADatabase(mCtx).getReadableDatabase();
 
         String[] projection = {KPADatabase.ProductColumns._ID,
@@ -130,19 +122,29 @@ public class ProductRepository {
                 null                                    // The sort order
         );
 
-        if(c.moveToFirst()) {
-            do {
-                int id              = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns._ID));
-                String name         = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_NAME));
-                String description  = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION));
-                int price           = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_PRICE));
-                String url          = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_URL));
+        if(c.getCount() == 0) {
+            c.close();
 
-                mData.add(new Product(id, name, description, price, url));
-            } while (c.moveToNext());
+            List<Product> res = Utils.nullToEmpty(ApiConnector.getProducts(mCtx));
+            for(Product p : res) {
+                mData.add(p);
+            }
+
+        } else {
+            if(c.moveToFirst()) {
+                do {
+                    int id              = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns._ID));
+                    String name         = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_NAME));
+                    String description  = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION));
+                    int price           = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_PRICE));
+                    String url          = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_URL));
+
+                    mData.add(new Product(id, name, description, price, url));
+                } while (c.moveToNext());
+            }
+
+            c.close();
         }
-
-        c.close();
 
         mInitialized = true;
     }

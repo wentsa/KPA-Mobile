@@ -1,11 +1,24 @@
 package cz.knihaplnaaktivit.kpa_mobile.connectors;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.knihaplnaaktivit.kpa_mobile.KPA300ContactUs;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendImage;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendMessage;
+import cz.knihaplnaaktivit.kpa_mobile.model.Product;
+import cz.knihaplnaaktivit.kpa_mobile.repository.KPADatabase;
+import cz.knihaplnaaktivit.kpa_mobile.utilities.Network;
 
 public class ApiConnector {
 
@@ -27,5 +40,51 @@ public class ApiConnector {
         intent.putExtra(ServiceSendMessage.MESSAGE, message);
 
         ctx.startService(intent);
+    }
+
+    public static List<Product> getProducts(Context ctx) {
+        try {
+            String response = Network.doGet("get_product_info.php", null);
+            if(response != null) {
+                JSONObject json = new JSONObject(response);
+                JSONArray products = json.getJSONArray("products");
+
+                List<Product> productsNew = new ArrayList<>();
+                for (int i = 0; i < products.length(); i++) {
+                    JSONObject product = products.getJSONObject(i);
+
+                    int id = product.getInt("id");
+                    String name = product.getString("name");
+                    String description = product.getString("description");
+                    int price = product.getInt("price");
+                    String url = product.getString("url");
+                    int version = product.getInt("version");
+
+                    productsNew.add(new Product(id, name, description, price, url));
+                }
+
+                replaceProductsInDb(productsNew, ctx);
+                return productsNew;
+            }
+
+        } catch (IOException | JSONException e) {}
+        return null;
+    }
+
+    private static void replaceProductsInDb(List<Product> productsNew, Context ctx) {
+        SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
+
+        db.delete(KPADatabase.ProductColumns.TABLE_NAME, null, null);
+
+        for (Product p : productsNew) {
+            ContentValues values = new ContentValues();
+            values.put(KPADatabase.ProductColumns._ID, p.getId());
+            values.put(KPADatabase.ProductColumns.COLUMN_NAME_NAME, p.getName());
+            values.put(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION, p.getDescription());
+            values.put(KPADatabase.ProductColumns.COLUMN_NAME_PRICE, p.getPrice());
+            values.put(KPADatabase.ProductColumns.COLUMN_NAME_URL, p.getWebUrl());
+
+            db.insert(KPADatabase.ProductColumns.TABLE_NAME, null, values);
+        }
     }
 }

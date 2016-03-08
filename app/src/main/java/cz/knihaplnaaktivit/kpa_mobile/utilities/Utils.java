@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.*;
 import android.net.Network;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import java.util.Collections;
@@ -261,5 +262,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Checks current thread and decides if it is UI thread
+     */
+    public static boolean isMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
+    }
 
 }
