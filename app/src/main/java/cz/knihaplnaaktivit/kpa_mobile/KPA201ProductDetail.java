@@ -59,26 +59,31 @@ public class KPA201ProductDetail extends AppCompatActivity {
     }
 
     private void loadProductDetail() {
-        mProduct = ProductRepository.getInstance(this).getProduct(mProductId);
-        if(mProduct != null) {
-            setTitle(mProduct.getName());
-            mDescription.setText(mProduct.getDescription());
-            mPrice.setText(Utils.getCurrencyFormat(mProduct.getPrice(), getString(R.string.currency)));
 
-            List<Bitmap> images = mProduct.fetchImages(this, 150);
-            if(images.isEmpty()) {
-                mImageScrollWrapper.setVisibility(View.GONE);
-            } else {
-                mImageScrollWrapper.setVisibility(View.VISIBLE);
-                for(Bitmap b : images) {
-                    ImageView iv = new ImageView(this);
-                    iv.setImageBitmap(b);
-                    iv.setAdjustViewBounds(true);
-                    iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                    mImageWrapper.addView(iv, lp);
+        try {
+            mProduct = ProductRepository.getInstance(this).getProduct(mProductId);
+            if(mProduct != null) {
+                setTitle(mProduct.getName());
+                mDescription.setText(mProduct.getDescription());
+                mPrice.setText(Utils.getCurrencyFormat(mProduct.getPrice(), getString(R.string.currency)));
+
+                List<Bitmap> images = mProduct.fetchImages(this, 150);
+                if(images.isEmpty()) {
+                    mImageScrollWrapper.setVisibility(View.GONE);
+                } else {
+                    mImageScrollWrapper.setVisibility(View.VISIBLE);
+                    for(Bitmap b : images) {
+                        ImageView iv = new ImageView(this);
+                        iv.setImageBitmap(b);
+                        iv.setAdjustViewBounds(true);
+                        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        mImageWrapper.addView(iv, lp);
+                    }
                 }
             }
+        } catch (ProductRepository.NotInitializedException e) {
+            // TODO
         }
     }
 

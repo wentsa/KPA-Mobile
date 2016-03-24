@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,12 +12,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cz.knihaplnaaktivit.kpa_mobile.KPA300ContactUs;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendImage;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendMessage;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
+import cz.knihaplnaaktivit.kpa_mobile.repository.DatabaseUtils;
 import cz.knihaplnaaktivit.kpa_mobile.repository.KPADatabase;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Network;
 
@@ -42,13 +46,32 @@ public class ApiConnector {
         ctx.startService(intent);
     }
 
-    public static List<Product> getProducts(Context ctx) {
+    /**
+     * Checks API for newer version of product info. If newer version exists
+     * records in DB are replaced by new version and returned from this method.
+     * Null is returned otherwise
+     * @param ctx context
+     * @param actualVersion current stored version of product info
+     * @return updated products or null
+     */
+    @Nullable
+    public static List<Product> fetchProducts(Context ctx, int actualVersion) {
         try {
-            String response = Network.doGet("get_product_info.php", null);
+            Map<String, String> params = new HashMap<>();
+            params.put("version", String.valueOf(actualVersion));
+
+            String response = Network.doGet("get_product_info.php", params);
             if(response != null) {
                 JSONObject json = new JSONObject(response);
-                JSONArray products = json.getJSONArray("products");
 
+                boolean isUpToDate = json.getBoolean("isUpToDate");
+                if(isUpToDate) {
+                    return null;
+                }
+
+                int version = json.getInt("version");
+
+                JSONArray products = json.getJSONArray("products");
                 List<Product> productsNew = new ArrayList<>();
                 for (int i = 0; i < products.length(); i++) {
                     JSONObject product = products.getJSONObject(i);
@@ -58,12 +81,11 @@ public class ApiConnector {
                     String description = product.getString("description");
                     int price = product.getInt("price");
                     String url = product.getString("url");
-                    int version = product.getInt("version");
 
                     productsNew.add(new Product(id, name, description, price, url));
                 }
 
-                replaceProductsInDb(productsNew, ctx);
+                replaceProductsInDb(productsNew, version, ctx);
                 return productsNew;
             }
 
@@ -71,7 +93,7 @@ public class ApiConnector {
         return null;
     }
 
-    private static void replaceProductsInDb(List<Product> productsNew, Context ctx) {
+    private static void replaceProductsInDb(List<Product> productsNew, int version, Context ctx) {
         SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
 
         db.delete(KPADatabase.ProductColumns.TABLE_NAME, null, null);
@@ -86,5 +108,13 @@ public class ApiConnector {
 
             db.insert(KPADatabase.ProductColumns.TABLE_NAME, null, values);
         }
+
+        DatabaseUtils.setProductVersionInfo(db, version);
+    }
+
+    public static void synchronize(Context ctx) {
+        SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
+        int actualVersion = DatabaseUtils.getProductVersionInfo(db);
+        fetchProducts(ctx, actualVersion);
     }
 }

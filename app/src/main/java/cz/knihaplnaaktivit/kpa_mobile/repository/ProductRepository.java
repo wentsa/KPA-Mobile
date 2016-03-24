@@ -3,6 +3,7 @@ package cz.knihaplnaaktivit.kpa_mobile.repository;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -81,16 +82,16 @@ public class ProductRepository {
         mData.add(new Product(8, "Pomucka 5", "Popis", 100, ""));*/
     }
 
-    public List<Product> getProducts() {
+    public List<Product> getProducts() throws NotInitializedException {
         if(!mInitialized) {
-            initialize();
+            throw new NotInitializedException();
         }
         return mData;
     }
 
-    public @Nullable Product getProduct(int id) {
+    public @Nullable Product getProduct(int id) throws NotInitializedException {
         if(!mInitialized) {
-            initialize();
+            throw new NotInitializedException();
         }
         for(Product p : mData) {
             if(p.getId() == id) {
@@ -100,54 +101,59 @@ public class ProductRepository {
         return null;
     }
 
-    private void initialize() {
-        mData.clear();
+    public void initialize() {
+        if(!mInitialized) {
+            SQLiteDatabase db = new KPADatabase(mCtx).getReadableDatabase();
 
-        SQLiteDatabase db = new KPADatabase(mCtx).getReadableDatabase();
+            String[] projection = {KPADatabase.ProductColumns._ID,
+                    KPADatabase.ProductColumns.COLUMN_NAME_NAME,
+                    KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION,
+                    KPADatabase.ProductColumns.COLUMN_NAME_PRICE,
+                    KPADatabase.ProductColumns.COLUMN_NAME_URL
+            };
 
-        String[] projection = {KPADatabase.ProductColumns._ID,
-                KPADatabase.ProductColumns.COLUMN_NAME_NAME,
-                KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION,
-                KPADatabase.ProductColumns.COLUMN_NAME_PRICE,
-                KPADatabase.ProductColumns.COLUMN_NAME_URL
-        };
+            Cursor c = db.query(
+                    KPADatabase.ProductColumns.TABLE_NAME,  // The table to query
+                    projection,                             // The columns to return
+                    null,                                   // The columns for the WHERE clause
+                    null,                                   // The values for the WHERE clause
+                    null,                                   // don't group the rows
+                    null,                                   // don't filter by row groups
+                    null                                    // The sort order
+            );
 
-        Cursor c = db.query(
-                KPADatabase.ProductColumns.TABLE_NAME,  // The table to query
-                projection,                             // The columns to return
-                null,                                   // The columns for the WHERE clause
-                null,                                   // The values for the WHERE clause
-                null,                                   // don't group the rows
-                null,                                   // don't filter by row groups
-                null                                    // The sort order
-        );
+            // no records in DB (first use)
+            if (c.getCount() == 0) {
+                c.close();
 
-        if(c.getCount() == 0) {
-            c.close();
+                List<Product> res = ApiConnector.fetchProducts(mCtx, DatabaseUtils.getProductVersionInfo(db));
+                if (res != null) {
+                    mData.clear();
+                    for (Product p : res) {
+                        mData.add(p);
+                    }
+                }
 
-            List<Product> res = Utils.nullToEmpty(ApiConnector.getProducts(mCtx));
-            for(Product p : res) {
-                mData.add(p);
+            } else {
+                mData.clear();
+                if (c.moveToFirst()) {
+                    do {
+                        int id = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns._ID));
+                        String name = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_NAME));
+                        String description = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION));
+                        int price = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_PRICE));
+                        String url = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_URL));
+
+                        mData.add(new Product(id, name, description, price, url));
+                    } while (c.moveToNext());
+                }
+
+                c.close();
             }
-
-        } else {
-            if(c.moveToFirst()) {
-                do {
-                    int id              = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns._ID));
-                    String name         = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_NAME));
-                    String description  = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION));
-                    int price           = c.getInt(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_PRICE));
-                    String url          = c.getString(c.getColumnIndex(KPADatabase.ProductColumns.COLUMN_NAME_URL));
-
-                    mData.add(new Product(id, name, description, price, url));
-                } while (c.moveToNext());
-            }
-
-            c.close();
         }
-
         mInitialized = true;
     }
 
+    public static class NotInitializedException extends Exception {}
 
 }

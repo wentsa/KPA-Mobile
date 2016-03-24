@@ -29,6 +29,13 @@ public class KPADatabase extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_IMAGE = "image";
     }
 
+    public static abstract class ConstantColumns implements BaseColumns {
+        public static final String TABLE_NAME = "Constants";
+
+        public static final String COLUMN_NAME_KEY = "key";
+        public static final String COLUMN_NAME_VALUE = "value";
+    }
+
     private static final String CREATE_PRODUCT_TABLE =
             "CREATE TABLE " + ProductColumns.TABLE_NAME + " ("
             + ProductColumns._ID + " INT, "
@@ -42,19 +49,27 @@ public class KPADatabase extends SQLiteOpenHelper {
                     + ProductImageColumns.COLUMN_NAME_PRODUCT_ID + " INT, "
                     + ProductImageColumns.COLUMN_NAME_IMAGE + " BLOB);";
 
+    private static final String CREATE_CONSTANTS_TABLE =
+            "CREATE TABLE " + ConstantColumns.TABLE_NAME + " ("
+                    + ConstantColumns.COLUMN_NAME_KEY + " TEXT, "
+                    + ConstantColumns.COLUMN_NAME_VALUE + " TEXT);";
+
     private static final String DELETE_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + ProductColumns.TABLE_NAME;
     private static final String DELETE_PRODUCT_IMAGE_TABLE = "DROP TABLE IF EXISTS " + ProductImageColumns.TABLE_NAME;
+    private static final String DELETE_CONSTANTS_TABLE = "DROP TABLE IF EXISTS " + ConstantColumns.TABLE_NAME;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PRODUCT_TABLE);
         db.execSQL(CREATE_PRODUCT_IMAGE_TABLE);
+        db.execSQL(CREATE_CONSTANTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DELETE_PRODUCT_TABLE);
         db.execSQL(DELETE_PRODUCT_IMAGE_TABLE);
+        db.execSQL(DELETE_CONSTANTS_TABLE);
         onCreate(db);
     }
 

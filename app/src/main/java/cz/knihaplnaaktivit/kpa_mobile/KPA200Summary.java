@@ -1,6 +1,7 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
@@ -20,6 +22,9 @@ import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
 
 public class KPA200Summary extends AppCompatActivity {
+
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     @Bind(R.id.list)
     ExpandableListView mList;
@@ -35,10 +40,22 @@ public class KPA200Summary extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        List<Product> products = ProductRepository.getInstance(this).getProducts();
-        mAdapter = new KPA200ExpendableListAdapter(this, products);
-        mList.setAdapter(mAdapter);
+        mProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
 
+        try {
+            List<Product> products = ProductRepository.getInstance(this).getProducts();
+
+            mAdapter = new KPA200ExpendableListAdapter(this, products);
+            mList.setAdapter(mAdapter);
+
+            mList.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+        } catch (ProductRepository.NotInitializedException e) {
+            mList.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            new InitializeProductsTask().execute();
+        }
         // only one expanded at time
         mList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
@@ -70,5 +87,27 @@ public class KPA200Summary extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.stay, R.anim.slide_up);
+    }
+
+    private class InitializeProductsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ProductRepository.getInstance(KPA200Summary.this).initialize();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                List<Product> products = ProductRepository.getInstance(KPA200Summary.this).getProducts();
+
+                mAdapter = new KPA200ExpendableListAdapter(KPA200Summary.this, products);
+                mList.setAdapter(mAdapter);
+
+                mList.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+            } catch (ProductRepository.NotInitializedException ignored) {}
+        }
     }
 }
