@@ -51,7 +51,7 @@ public class KPADatabase extends SQLiteOpenHelper {
 
     private static final String CREATE_CONSTANTS_TABLE =
             "CREATE TABLE " + ConstantColumns.TABLE_NAME + " ("
-                    + ConstantColumns.COLUMN_NAME_KEY + " TEXT, "
+                    + ConstantColumns.COLUMN_NAME_KEY + " TEXT PRIMARY KEY, "
                     + ConstantColumns.COLUMN_NAME_VALUE + " TEXT);";
 
     private static final String DELETE_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + ProductColumns.TABLE_NAME;

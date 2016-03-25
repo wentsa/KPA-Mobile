@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cz.knihaplnaaktivit.kpa_mobile.KPA300ContactUs;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendImage;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendMessage;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;

@@ -21,8 +21,6 @@ public class KPAApplication extends Application {
     public static class WifiConnectedReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context, "wifi connected", Toast.LENGTH_SHORT).show();
-
             if (Utils.isWifiConnected(context)){
                 synchronize(context);
             }
