@@ -59,6 +59,7 @@ public class ApiConnector {
     public static void updateProductsInfo(Context ctx) {
         SQLiteDatabase db = new KPADatabase(ctx).getReadableDatabase();
         int actualVersion = DatabaseUtils.getProductVersionInfo(db);
+        db.close();
 
         try {
             Map<String, String> params = new HashMap<>();
@@ -118,6 +119,8 @@ public class ApiConnector {
         DatabaseUtils.setProductVersionInfo(db, version);
 
         removeUnnecesaryImagesFromDb(db, idSet);
+
+        db.close();
     }
 
     /**
@@ -169,6 +172,7 @@ public class ApiConnector {
     public static void updateProductsImages(Context ctx, int productId) {
         SQLiteDatabase db = new KPADatabase(ctx).getReadableDatabase();
         int actualVersion = DatabaseUtils.getProductImageVersionInfo(db, productId);
+        db.close();
 
         try {
             Map<String, String> params = new HashMap<>();
@@ -214,6 +218,8 @@ public class ApiConnector {
         }
 
         DatabaseUtils.setProductImageVersionInfo(db, version, productId);
+
+        db.close();
     }
 
     public static void synchronize(Context ctx) {

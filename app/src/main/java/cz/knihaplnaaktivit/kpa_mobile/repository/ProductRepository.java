@@ -48,6 +48,8 @@ public class ProductRepository {
 
         c.close();
 
+        db.close();
+
         return res;
 
     }
@@ -85,6 +87,8 @@ public class ProductRepository {
         }
 
         c.close();
+
+        db.close();
 
         return res;
     }

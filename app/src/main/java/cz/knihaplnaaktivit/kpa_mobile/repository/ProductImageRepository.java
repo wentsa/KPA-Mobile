@@ -43,6 +43,8 @@ public class ProductImageRepository {
 
         c.close();
 
+        db.close();
+
         return list;
     }
 }

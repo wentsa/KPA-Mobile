@@ -2,24 +2,22 @@ package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -37,8 +35,9 @@ public class KPA201ProductDetail extends AppCompatActivity {
     @Bind(R.id.image_prev_wrapper)
     LinearLayout mImageWrapper;
 
-    @Bind(R.id.image_prev_scroll_wrapper)
-    HorizontalScrollView mImageScrollWrapper;
+    View mImageScrollWrapperHorizontal;
+
+    View mImageScrollWrapper;
 
     @Bind(R.id.description)
     TextView mDescription;
@@ -56,6 +55,9 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        mImageScrollWrapperHorizontal = findViewById(R.id.image_prev_scroll_wrapper);
+        mImageScrollWrapper = findViewById(R.id.image_prev_scroll_wrapper_land);
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             mProductId = extras.getInt(ITEM_ID_KEY);
@@ -72,15 +74,32 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
             List<Bitmap> images = ProductImageRepository.getImages(this, mProduct.getId());
             if(images.isEmpty()) {
-                mImageScrollWrapper.setVisibility(View.GONE);
+                if(mImageScrollWrapper != null) {
+                    mImageScrollWrapper.setVisibility(View.GONE);
+                }
+                if(mImageScrollWrapperHorizontal != null) {
+                    mImageScrollWrapperHorizontal.setVisibility(View.GONE);
+                }
             } else {
-                mImageScrollWrapper.setVisibility(View.VISIBLE);
+                if(mImageScrollWrapper != null) {
+                    mImageScrollWrapper.setVisibility(View.VISIBLE);
+                }
+                if(mImageScrollWrapperHorizontal != null) {
+                    mImageScrollWrapperHorizontal.setVisibility(View.VISIBLE);
+                }
                 for(final Bitmap b : images) {
                     ImageView iv = new ImageView(this);
                     iv.setImageBitmap(b);
                     iv.setAdjustViewBounds(true);
                     iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+                    LinearLayout.LayoutParams lp;
+                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    } else {
+                        lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    }
+
                     iv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
