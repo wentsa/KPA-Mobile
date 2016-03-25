@@ -44,8 +44,4 @@ public class Product {
     public String getWebUrl() {
         return mWebUrl;
     }
-
-    public @NonNull List<Bitmap> fetchImages(Context ctx, int height) {
-        return Utils.nullToEmpty(ProductImageRepository.getInstance(ctx).getImages(mId, height));
-    }
 }

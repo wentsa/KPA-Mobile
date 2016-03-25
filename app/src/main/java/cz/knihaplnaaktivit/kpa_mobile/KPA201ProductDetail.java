@@ -1,7 +1,5 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
-import android.app.ActionBar;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,13 +13,13 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
+import cz.knihaplnaaktivit.kpa_mobile.repository.ProductImageRepository;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
@@ -59,32 +57,27 @@ public class KPA201ProductDetail extends AppCompatActivity {
     }
 
     private void loadProductDetail() {
+        mProduct = ProductRepository.getProduct(this, mProductId);
+        if(mProduct != null) {
+            setTitle(mProduct.getName());
+            mDescription.setText(mProduct.getDescription());
+            mPrice.setText(Utils.getCurrencyFormat(mProduct.getPrice(), getString(R.string.currency)));
 
-        try {
-            mProduct = ProductRepository.getInstance(this).getProduct(mProductId);
-            if(mProduct != null) {
-                setTitle(mProduct.getName());
-                mDescription.setText(mProduct.getDescription());
-                mPrice.setText(Utils.getCurrencyFormat(mProduct.getPrice(), getString(R.string.currency)));
-
-                List<Bitmap> images = mProduct.fetchImages(this, 150);
-                if(images.isEmpty()) {
-                    mImageScrollWrapper.setVisibility(View.GONE);
-                } else {
-                    mImageScrollWrapper.setVisibility(View.VISIBLE);
-                    for(Bitmap b : images) {
-                        ImageView iv = new ImageView(this);
-                        iv.setImageBitmap(b);
-                        iv.setAdjustViewBounds(true);
-                        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                        mImageWrapper.addView(iv, lp);
-                    }
+            List<Bitmap> images = ProductImageRepository.getImages(this, mProduct.getId());
+            if(images.isEmpty()) {
+                mImageScrollWrapper.setVisibility(View.GONE);
+            } else {
+                mImageScrollWrapper.setVisibility(View.VISIBLE);
+                for(Bitmap b : images) {
+                    ImageView iv = new ImageView(this);
+                    iv.setImageBitmap(b);
+                    iv.setAdjustViewBounds(true);
+                    iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    mImageWrapper.addView(iv, lp);
                 }
             }
-        } catch (ProductRepository.NotInitializedException e) {
-            // TODO
-        }
+            }
     }
 
     @Override
