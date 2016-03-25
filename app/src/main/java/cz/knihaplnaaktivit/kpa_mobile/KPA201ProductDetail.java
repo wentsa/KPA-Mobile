@@ -1,18 +1,25 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -68,16 +75,46 @@ public class KPA201ProductDetail extends AppCompatActivity {
                 mImageScrollWrapper.setVisibility(View.GONE);
             } else {
                 mImageScrollWrapper.setVisibility(View.VISIBLE);
-                for(Bitmap b : images) {
+                for(final Bitmap b : images) {
                     ImageView iv = new ImageView(this);
                     iv.setImageBitmap(b);
                     iv.setAdjustViewBounds(true);
                     iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    iv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showImageDialog(b);
+                        }
+                    });
                     mImageWrapper.addView(iv, lp);
                 }
             }
+        }
+    }
+
+    private void showImageDialog(Bitmap bitmap) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_kpa201_image_detail);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView iv = (ImageView) dialog.findViewById(R.id.image);
+        iv.setImageBitmap(bitmap);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+        dialog.show();
+
+        dialog.getWindow().setAttributes(lp);
     }
 
     @Override
