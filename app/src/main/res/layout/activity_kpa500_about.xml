@@ -134,7 +134,7 @@
                     android:layout_weight="1"
                     android:text="@string/facebook_page"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="#FFFFFF"/>
 
             </LinearLayout>
 
@@ -161,7 +161,7 @@
                     android:layout_weight="1"
                     android:text="@string/facebook_group"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="#FFFFFF"/>
 
             </LinearLayout>
 

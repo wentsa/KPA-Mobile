@@ -24,7 +24,7 @@ public class KPA100Dashboard extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        View button = findViewById(R.id.btn_share_photo);
+        View button = findViewById(R.id.share_photo_wrapper);
         if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             button.setVisibility(View.VISIBLE);
         } else {

@@ -228,6 +228,7 @@ public class ApiConnector {
         for(Product p : Utils.nullToEmpty(products)) {
             updateProductsImages(ctx, p.getId());
         }
+        // TODO odeslat
 
     }
 }
