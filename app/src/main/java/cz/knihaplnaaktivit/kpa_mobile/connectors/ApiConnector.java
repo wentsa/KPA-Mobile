@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 
 import org.json.JSONArray;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cz.knihaplnaaktivit.kpa_mobile.KPA201ProductDetail;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendImage;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.services.ServiceSendMessage;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
@@ -204,6 +206,10 @@ public class ApiConnector {
                 }
 
                 replaceImagesInDb(imagesNew, version, productId, ctx);
+
+                Intent intent = new Intent(KPA201ProductDetail.PRODUCT_IMAGE_UPDATED_FILTER);
+                intent.putExtra("id", productId);
+                LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
             }
 
         } catch (IOException | JSONException e) {}

@@ -15,9 +15,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
+import cz.knihaplnaaktivit.kpa_mobile.model.Product;
+import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA100Dashboard extends AppCompatActivity {
@@ -51,10 +55,11 @@ public class KPA100Dashboard extends AppCompatActivity {
         animateSyncIcon();
 
         if(Utils.isOnline(this)) {
-            new AsyncTask<Context, Void, Void>() {
+            // updates product info, after finish user is not blocked anymore and image sync in background is started
+            new AsyncTask<Void, Void, Void>() {
                 @Override
-                protected Void doInBackground(Context... params) {
-                    ApiConnector.synchronize(params[0], Utils.isWifiConnected(params[0]));
+                protected Void doInBackground(Void... params) {
+                    ApiConnector.synchronize(KPA100Dashboard.this, false);
                     return null;
                 }
 
@@ -62,12 +67,29 @@ public class KPA100Dashboard extends AppCompatActivity {
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
 
-                    isAlreadySynchronized = true;
                     mSyncWrapper.setVisibility(View.GONE);
                     mDashboardWrapper.setVisibility(View.VISIBLE);
                     mSyncIcon.setAnimation(null);
+
+                    // updates images
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            List<Product> products = ProductRepository.getProducts(KPA100Dashboard.this);
+                            for(Product p : products) {
+                                ApiConnector.updateProductsImages(KPA100Dashboard.this, p.getId());
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            isAlreadySynchronized = true;
+                        }
+                    }.execute();
                 }
-            }.execute(this);
+            }.execute();
 
         } else {
             Toast.makeText(KPA100Dashboard.this, R.string.without_connection, Toast.LENGTH_SHORT).show();

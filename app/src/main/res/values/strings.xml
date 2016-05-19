@@ -74,6 +74,7 @@
     <string name="without_connection">Bez připojení k internetu</string>
     <string name="crash_toast_text">Nastala chyba, odešlete nám prosím detailní info a my se ji pokusíme co nejdříve napravit. Děkujeme</string>
     <string name="summary_no_products_error">Pro zobrazení seznamu našich pomůcek se nejdříve připojte k internetu.</string>
+    <string name="placeholder_summary_no_images">Pro stažení obrázků se připojte k síti WiFi.</string>
 
 
 </resources>

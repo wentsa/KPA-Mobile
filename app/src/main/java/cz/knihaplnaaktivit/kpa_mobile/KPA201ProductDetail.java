@@ -1,14 +1,17 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,6 +54,18 @@ public class KPA201ProductDetail extends AppCompatActivity {
     private int mProductId;
     private Product mProduct;
 
+    public static final String PRODUCT_IMAGE_UPDATED_FILTER = "productImageUpdated";
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int productId = intent.getIntExtra("id", -1);
+            if(productId == mProductId) {
+                loadProductDetail();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +76,15 @@ public class KPA201ProductDetail extends AppCompatActivity {
         mImageScrollWrapperHorizontal = findViewById(R.id.image_prev_scroll_wrapper);
         mImageScrollWrapper = findViewById(R.id.image_prev_scroll_wrapper_land);
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter(PRODUCT_IMAGE_UPDATED_FILTER));
+
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             mProductId = extras.getInt(ITEM_ID_KEY);
             loadProductDetail();
         }
 
-        if(Utils.isWifiConnected(this)) {
+        if(Utils.isOnline(this)) {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -82,6 +99,12 @@ public class KPA201ProductDetail extends AppCompatActivity {
                 }
             }.execute();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
     }
 
     private void loadProductDetail() {
@@ -185,6 +208,5 @@ public class KPA201ProductDetail extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.stay, R.anim.slide_right);
     }
-
 
 }

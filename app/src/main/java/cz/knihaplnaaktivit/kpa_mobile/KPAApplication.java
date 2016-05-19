@@ -39,7 +39,7 @@ public class KPAApplication extends Application {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        ApiConnector.synchronize(context, Utils.isWifiConnected(context));
+                        ApiConnector.synchronize(context, true);
                         return null;
                     }
                 }.execute();
