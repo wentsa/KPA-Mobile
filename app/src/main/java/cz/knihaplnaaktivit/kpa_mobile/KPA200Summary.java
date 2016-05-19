@@ -39,22 +39,28 @@ public class KPA200Summary extends AppCompatActivity {
         mList.setVisibility(View.VISIBLE);
 
         // only one expanded at time
-        mList.setOnGroupExpandListener(groupPosition -> {
-            if(mPrevExpanded != -1 && mPrevExpanded != groupPosition) {
-                mList.collapseGroup(mPrevExpanded);
+        mList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (mPrevExpanded != -1 && mPrevExpanded != groupPosition) {
+                    mList.collapseGroup(mPrevExpanded);
+                }
+                mPrevExpanded = groupPosition;
             }
-            mPrevExpanded = groupPosition;
         });
 
         // detail click
-        mList.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-            Product selectedItem = (Product) mAdapter.getGroup(groupPosition);
+        mList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Product selectedItem = (Product) mAdapter.getGroup(groupPosition);
 
-            Intent intent = new Intent(KPA200Summary.this, KPA201ProductDetail.class);
-            intent.putExtra(KPA201ProductDetail.ITEM_ID_KEY, selectedItem.getId());
-            KPA200Summary.this.startActivity(intent);
-            overridePendingTransition(R.anim.slide_left, R.anim.stay);
-            return true;
+                Intent intent = new Intent(KPA200Summary.this, KPA201ProductDetail.class);
+                intent.putExtra(KPA201ProductDetail.ITEM_ID_KEY, selectedItem.getId());
+                KPA200Summary.this.startActivity(intent);
+                overridePendingTransition(R.anim.slide_left, R.anim.stay);
+                return true;
+            }
         });
 
     }

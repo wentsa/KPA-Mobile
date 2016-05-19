@@ -31,15 +31,15 @@ public class KPAApplication extends Application {
         ACRA.init(this);
     }
 
-    public static class WifiConnectedReceiver extends BroadcastReceiver {
+    public static class ConnectedReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(final Context context, Intent intent) {
-            if (Utils.isWifiConnected(context)){
+            if (Utils.isOnline(context)){
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        ApiConnector.synchronize(context, true);
+                        ApiConnector.synchronize(context, Utils.isWifiConnected(context));
                         return null;
                     }
                 }.execute();

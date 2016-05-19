@@ -1,11 +1,13 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductImageRepository;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
@@ -63,6 +66,22 @@ public class KPA201ProductDetail extends AppCompatActivity {
             mProductId = extras.getInt(ITEM_ID_KEY);
             loadProductDetail();
         }
+
+        if(Utils.isWifiConnected(this)) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    ApiConnector.updateProductsImages(KPA201ProductDetail.this, mProductId);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    loadProductDetail();
+                }
+            }.execute();
+        }
     }
 
     private void loadProductDetail() {
@@ -72,6 +91,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
             mDescription.setText(mProduct.getDescription());
             mPrice.setText(Utils.getCurrencyFormat(mProduct.getPrice(), getString(R.string.currency)));
 
+            mImageWrapper.removeAllViews();
             List<Bitmap> images = ProductImageRepository.getImages(this, mProduct.getId());
             if(images.isEmpty()) {
                 if(mImageScrollWrapper != null) {
@@ -100,7 +120,12 @@ public class KPA201ProductDetail extends AppCompatActivity {
                         lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     }
 
-                    iv.setOnClickListener(v -> showImageDialog(b));
+                    iv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showImageDialog(b);
+                        }
+                    });
                     mImageWrapper.addView(iv, lp);
                 }
             }
@@ -114,7 +139,12 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
         ImageView iv = (ImageView) dialog.findViewById(R.id.image);
         iv.setImageBitmap(bitmap);
-        iv.setOnClickListener(v -> dialog.dismiss());
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());

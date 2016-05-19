@@ -191,11 +191,16 @@ public class ApiConnector {
                 int version = json.getInt("version");
 
                 JSONArray images = json.getJSONArray("images");
-                List<byte[]> imagesNew = new ArrayList<>();
+                List<ImageHolder> imagesNew = new ArrayList<>();
                 for (int i = 0; i < images.length(); i++) {
-                    String base64image = images.getString(i);
+                    JSONObject imageWrap = images.getJSONObject(i);
+
+                    String base64image = imageWrap.getString("image");
                     byte[] image = Base64.decode(base64image, Base64.URL_SAFE);
-                    imagesNew.add(image);
+
+                    int order = imageWrap.getInt("order");
+
+                    imagesNew.add(new ImageHolder(image, order));
                 }
 
                 replaceImagesInDb(imagesNew, version, productId, ctx);
@@ -204,15 +209,16 @@ public class ApiConnector {
         } catch (IOException | JSONException e) {}
     }
 
-    private static void replaceImagesInDb(List<byte[]> imagesNew, int version, int productId, Context ctx) {
+    private static void replaceImagesInDb(List<ImageHolder> imagesNew, int version, int productId, Context ctx) {
         SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
 
         db.delete(KPADatabase.ProductImageColumns.TABLE_NAME, KPADatabase.ProductImageColumns.COLUMN_NAME_PRODUCT_ID + "=" + productId, null);
 
-        for (byte[] b : imagesNew) {
+        for (ImageHolder img : imagesNew) {
             ContentValues values = new ContentValues();
             values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_PRODUCT_ID, productId);
-            values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE, b);
+            values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE, img.image);
+            values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE_ORDER, img.order);
 
             db.insert(KPADatabase.ProductImageColumns.TABLE_NAME, null, values);
         }
@@ -230,6 +236,15 @@ public class ApiConnector {
                 updateProductsImages(ctx, p.getId());
             }
         }
-        // TODO odeslat
+    }
+
+    private static class ImageHolder {
+        byte[] image;
+        int order;
+
+        private ImageHolder(byte[] image, int order) {
+            this.image = image;
+            this.order = order;
+        }
     }
 }

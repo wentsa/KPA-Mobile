@@ -26,7 +26,7 @@ public class ProductImageRepository {
                 null,
                 null,
                 null,
-                null
+                KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE_ORDER
         );
 
         List<Bitmap> list = new ArrayList<>();

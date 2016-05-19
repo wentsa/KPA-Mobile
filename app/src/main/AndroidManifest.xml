@@ -27,6 +27,12 @@
             android:icon="@drawable/ic_upload_black_24dp"
             android:label="@string/message_upload"/>
 
+        <receiver android:name=".KPAApplication$ConnectedReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".KPA100Dashboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,12 +80,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
         </activity>
-
-        <receiver android:name=".KPAApplication$WifiConnectedReceiver">
-            <intent-filter>
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

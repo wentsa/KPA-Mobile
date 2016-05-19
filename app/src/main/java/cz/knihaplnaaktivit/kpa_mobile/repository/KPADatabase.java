@@ -26,6 +26,7 @@ public class KPADatabase extends SQLiteOpenHelper {
         public static final String TABLE_NAME = "ProductImage";
 
         public static final String COLUMN_NAME_PRODUCT_ID = "product_id";
+        public static final String COLUMN_NAME_IMAGE_ORDER = "image_order";
         public static final String COLUMN_NAME_IMAGE = "image";
     }
 
@@ -47,6 +48,7 @@ public class KPADatabase extends SQLiteOpenHelper {
     private static final String CREATE_PRODUCT_IMAGE_TABLE =
             "CREATE TABLE " + ProductImageColumns.TABLE_NAME + " ("
                     + ProductImageColumns.COLUMN_NAME_PRODUCT_ID + " INT, "
+                    + ProductImageColumns.COLUMN_NAME_IMAGE_ORDER + " INT, "
                     + ProductImageColumns.COLUMN_NAME_IMAGE + " BLOB);";
 
     private static final String CREATE_CONSTANTS_TABLE =
