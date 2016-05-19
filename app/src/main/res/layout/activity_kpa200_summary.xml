@@ -18,7 +18,17 @@
         android:layout_height="match_parent"
         android:groupIndicator="@android:color/transparent"
         android:divider="@null"
-        android:dividerHeight="3dp" >
+        android:dividerHeight="3dp">
 
     </ExpandableListView>
+
+    <TextView
+        android:id="@+id/placeholder_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/summary_no_products_error"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

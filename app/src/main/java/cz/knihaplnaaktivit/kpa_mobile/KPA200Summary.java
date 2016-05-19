@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class KPA200Summary extends AppCompatActivity {
     @Bind(R.id.list)
     ExpandableListView mList;
 
+    @Bind(R.id.placeholder_summary)
+    TextView mPlaceholder;
+
     private int mPrevExpanded = -1;
 
     private KPA200ExpendableListAdapter mAdapter;
@@ -30,8 +34,14 @@ public class KPA200Summary extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
         List<Product> products = ProductRepository.getProducts(this);
+        if(products.isEmpty()) {
+            mPlaceholder.setVisibility(View.VISIBLE);
+            mList.setVisibility(View.GONE);
+        } else {
+            mPlaceholder.setVisibility(View.GONE);
+            mList.setVisibility(View.VISIBLE);
+        }
 
         mAdapter = new KPA200ExpendableListAdapter(this, products);
         mList.setAdapter(mAdapter);
