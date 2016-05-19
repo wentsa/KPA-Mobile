@@ -1,6 +1,5 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
@@ -28,13 +27,13 @@ public class KPA100Dashboard extends AppCompatActivity {
 
     private static boolean isAlreadySynchronized = false;
 
-    @Bind(R.id.sync_wrapper)
+    @BindView(R.id.sync_wrapper)
     RelativeLayout mSyncWrapper;
 
-    @Bind(R.id.dashboard_wrapper)
+    @BindView(R.id.dashboard_wrapper)
     ScrollView mDashboardWrapper;
 
-    @Bind(R.id.sync_icon)
+    @BindView(R.id.sync_icon)
     ImageView mSyncIcon;
 
     @Override

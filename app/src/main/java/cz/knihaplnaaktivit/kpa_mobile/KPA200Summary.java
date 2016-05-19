@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.adapters.KPA200ExpendableListAdapter;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
@@ -17,10 +17,10 @@ import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
 
 public class KPA200Summary extends AppCompatActivity {
 
-    @Bind(R.id.list)
+    @BindView(R.id.list)
     ExpandableListView mList;
 
-    @Bind(R.id.placeholder_summary)
+    @BindView(R.id.placeholder_summary)
     TextView mPlaceholder;
 
     private int mPrevExpanded = -1;

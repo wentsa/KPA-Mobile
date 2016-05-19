@@ -18,15 +18,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
@@ -38,17 +36,17 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
     public static final String ITEM_ID_KEY = "itemId";
 
-    @Bind(R.id.image_prev_wrapper)
+    @BindView(R.id.image_prev_wrapper)
     LinearLayout mImageWrapper;
 
     View mImageScrollWrapperHorizontal;
 
     View mImageScrollWrapper;
 
-    @Bind(R.id.description)
+    @BindView(R.id.description)
     TextView mDescription;
 
-    @Bind(R.id.price)
+    @BindView(R.id.price)
     TextView mPrice;
 
     private int mProductId;

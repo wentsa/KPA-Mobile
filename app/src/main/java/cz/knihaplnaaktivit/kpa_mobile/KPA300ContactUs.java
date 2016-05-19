@@ -1,53 +1,32 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA300ContactUs extends AppCompatActivity {
 
-    @Bind(R.id.input_name)
+    @BindView(R.id.input_name)
     EditText mName;
 
-    @Bind(R.id.input_email)
+    @BindView(R.id.input_email)
     EditText mEmail;
 
-    @Bind(R.id.input_subject)
+    @BindView(R.id.input_subject)
     EditText mSubject;
 
-    @Bind(R.id.input_message)
+    @BindView(R.id.input_message)
     EditText mMessage;
 
 
