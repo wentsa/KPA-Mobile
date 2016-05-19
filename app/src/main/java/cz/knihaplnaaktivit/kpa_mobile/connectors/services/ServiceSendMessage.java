@@ -68,6 +68,8 @@ public class ServiceSendMessage extends IntentService {
             }
         } catch (Exception e) {
             toast(getString(R.string.send_message_not_ok));
+        } finally {
+            stopForeground(true);
         }
     }
 

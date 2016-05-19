@@ -100,12 +100,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
                         lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     }
 
-                    iv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showImageDialog(b);
-                        }
-                    });
+                    iv.setOnClickListener(v -> showImageDialog(b));
                     mImageWrapper.addView(iv, lp);
                 }
             }
@@ -119,12 +114,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
         ImageView iv = (ImageView) dialog.findViewById(R.id.image);
         iv.setImageBitmap(bitmap);
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        iv.setOnClickListener(v -> dialog.dismiss());
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());

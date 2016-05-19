@@ -113,6 +113,8 @@ public class ServiceSendImage extends IntentService {
             }
         } catch (Exception e) {
             toast(getString(R.string.send_image_not_ok2));
+        } finally {
+            stopForeground(true);
         }
     }
 

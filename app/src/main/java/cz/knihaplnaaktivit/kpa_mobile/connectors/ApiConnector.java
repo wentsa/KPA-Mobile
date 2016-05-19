@@ -222,13 +222,14 @@ public class ApiConnector {
         db.close();
     }
 
-    public static void synchronize(Context ctx) {
+    public static void synchronize(Context ctx, boolean withImages) {
         updateProductsInfo(ctx);
         List<Product> products = ProductRepository.getProducts(ctx);
-        for(Product p : Utils.nullToEmpty(products)) {
-            updateProductsImages(ctx, p.getId());
+        if(withImages) {
+            for (Product p : Utils.nullToEmpty(products)) {
+                updateProductsImages(ctx, p.getId());
+            }
         }
         // TODO odeslat
-
     }
 }

@@ -215,19 +215,12 @@ public class KPA400PhotoShare extends AppCompatActivity {
                         new AlertDialog.Builder(this)
                                 .setTitle(getString(R.string.no_wifi_title))
                                 .setMessage(getString(R.string.no_wifi_message))
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ApiConnector.sendImage(KPA400PhotoShare.this, name, mail, description, mImagePath);
-                                        Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
+                                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                    ApiConnector.sendImage(KPA400PhotoShare.this, name, mail, description, mImagePath);
+                                    Toast.makeText(KPA400PhotoShare.this, R.string.send_image_ok, Toast.LENGTH_SHORT).show();
+                                    finish();
                                 })
-                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
+                                .setNegativeButton(R.string.no, (dialog, which) -> {})
                                 .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
                                 .show();
                     } else {
@@ -258,15 +251,10 @@ public class KPA400PhotoShare extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.permission_explanation_title))
                     .setMessage(getString(R.string.permission_explanation_message))
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestPermission(type);
-                        }
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        requestPermission(type);
                     })
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
+                    .setNegativeButton(R.string.no, (dialog, which) -> {})
                     .setIcon(android.R.drawable.ic_dialog_info) // TODO red icon
                     .show();
 
