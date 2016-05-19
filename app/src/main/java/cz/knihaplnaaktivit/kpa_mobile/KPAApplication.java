@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import org.acra.ACRA;
-import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
@@ -15,7 +14,7 @@ import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 @ReportsCrashes(
-        mailTo = "jozifeck6@gmail.com",
+        mailTo = "wentsa@seznam.cz",
         mode = ReportingInteractionMode.DIALOG,
         resDialogText = R.string.crash_toast_text)
 public class KPAApplication extends Application {

@@ -1,6 +1,5 @@
 package cz.knihaplnaaktivit.kpa_mobile.utilities;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -111,7 +110,7 @@ public class Utils {
      * @see #formatCurrency(long)
      * @param val value
      * @param appender appender
-     * @return formated currency
+     * @return formatted currency
      */
     public static String getCurrencyFormat(long val, String appender) {
         return Utils.formatCurrency(val) + " " + appender;
@@ -123,7 +122,7 @@ public class Utils {
      * @see #formatCurrencyShortcutted(int)
      * @param val value
      * @param appender appender
-     * @return formated currency
+     * @return formatted currency
      */
     public static String getCurrencyFormatShortcutted(int val, String appender) {
         return Utils.formatCurrencyShortcutted(val) + " " + appender;
@@ -139,7 +138,7 @@ public class Utils {
     /**
      * Checks email validity
      */
-    public final static boolean isValidEmail(CharSequence mail) {
+    public static boolean isValidEmail(CharSequence mail) {
         return !TextUtils.isEmpty(mail) && android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches();
     }
 
@@ -241,7 +240,7 @@ public class Utils {
      * @param ctx app context
      * @param fbContext part of facebook url (facebook.com/{fbContext})
      * @param facebookId facebook ID
-     * @param isPage true if page, falsi if group
+     * @param isPage true if page, false if group
      */
     public static void visitFacebook(Context ctx, String fbContext, String facebookId, boolean isPage) {
         String facebookUrl = "https://www.facebook.com/" + fbContext;
