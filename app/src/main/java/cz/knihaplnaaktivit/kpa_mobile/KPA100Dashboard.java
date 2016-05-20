@@ -14,6 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
@@ -26,10 +29,10 @@ public class KPA100Dashboard extends AppCompatActivity {
     private static boolean isAlreadySynchronized = false;
 
     RelativeLayout mSyncWrapper;
-
     ScrollView mDashboardWrapper;
-
     ImageView mSyncIcon;
+
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,9 @@ public class KPA100Dashboard extends AppCompatActivity {
         mSyncWrapper = (RelativeLayout) findViewById(R.id.sync_wrapper);
         mDashboardWrapper = (ScrollView) findViewById(R.id.dashboard_wrapper);
         mSyncIcon = (ImageView) findViewById(R.id.sync_icon);
+
+        KPAApplication application = (KPAApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         if(!isAlreadySynchronized) {
             synchronize();
@@ -114,6 +120,9 @@ public class KPA100Dashboard extends AppCompatActivity {
         } else {
             button.setVisibility(View.GONE);
         }
+
+        mTracker.setScreenName("KPA100Dashboard");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public void onBtnSummaryClicked(View v) {

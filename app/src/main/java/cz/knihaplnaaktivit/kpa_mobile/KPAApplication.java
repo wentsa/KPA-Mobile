@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
@@ -19,6 +22,8 @@ import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
         resDialogText = R.string.crash_toast_text)
 public class KPAApplication extends Application {
 
+    private Tracker mTracker;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -28,6 +33,14 @@ public class KPAApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         ACRA.init(this);
+    }
+
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 
     public static class ConnectedReceiver extends BroadcastReceiver {

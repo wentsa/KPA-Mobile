@@ -10,20 +10,20 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA300ContactUs extends AppCompatActivity {
 
     EditText mName;
-
     EditText mEmail;
-
     EditText mSubject;
-
     EditText mMessage;
 
-
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,9 @@ public class KPA300ContactUs extends AppCompatActivity {
         mEmail = (EditText) findViewById(R.id.input_email);
         mSubject = (EditText) findViewById(R.id.input_subject);
         mMessage = (EditText) findViewById(R.id.input_message);
+
+        KPAApplication application = (KPAApplication) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -49,6 +52,11 @@ public class KPA300ContactUs extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.send: {
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("ContactUs")
+                        .setAction("Try send")
+                        .build());
+
                 send();
                 return true;
             }
@@ -118,6 +126,13 @@ public class KPA300ContactUs extends AppCompatActivity {
                     .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
                     .show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setScreenName("KPA300ContactUs");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

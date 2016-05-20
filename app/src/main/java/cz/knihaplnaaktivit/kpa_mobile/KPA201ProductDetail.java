@@ -22,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
@@ -35,19 +38,17 @@ public class KPA201ProductDetail extends AppCompatActivity {
     public static final String ITEM_ID_KEY = "itemId";
 
     LinearLayout mImageWrapper;
-
     View mImageScrollWrapperHorizontal;
-
     View mImageScrollWrapper;
-
     TextView mDescription;
-
     TextView mPrice;
 
     private int mProductId;
     private Product mProduct;
 
     public static final String PRODUCT_IMAGE_UPDATED_FILTER = "productImageUpdated";
+
+    private Tracker mTracker;
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -67,6 +68,9 @@ public class KPA201ProductDetail extends AppCompatActivity {
         mImageWrapper = (LinearLayout) findViewById(R.id.image_prev_wrapper);
         mDescription = (TextView) findViewById(R.id.description);
         mPrice = (TextView) findViewById(R.id.price);
+
+        KPAApplication application = (KPAApplication) getApplication();
+        mTracker = application.getDefaultTracker();
 
         mImageScrollWrapperHorizontal = findViewById(R.id.image_prev_scroll_wrapper);
         mImageScrollWrapper = findViewById(R.id.image_prev_scroll_wrapper_land);
@@ -186,6 +190,11 @@ public class KPA201ProductDetail extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.web: {
                 if(mProduct != null) {
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Product detail")
+                            .setAction("URL")
+                            .build());
+
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mProduct.getWebUrl()));
                     if(intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
@@ -196,6 +205,13 @@ public class KPA201ProductDetail extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mTracker.setScreenName("KPA201ProductDetail");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
