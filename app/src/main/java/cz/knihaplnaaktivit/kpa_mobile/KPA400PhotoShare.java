@@ -31,8 +31,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
@@ -58,22 +56,11 @@ public class KPA400PhotoShare extends AppCompatActivity {
 
     private String mImagePath;
 
-    @BindView(R.id.thumbnail)
     ImageView mThumbnail;
-
-    @BindView(R.id.input_name)
     EditText mName;
-
-    @BindView(R.id.input_email)
     EditText mEmail;
-
-    @BindView(R.id.input_description)
     EditText mDescription;
-
-    @BindView(R.id.content_wrapper)
     ScrollView mContentWrapper;
-
-    @BindView(R.id.placeholder_warning)
     TextView mPlaceholderWarning;
 
     @Override
@@ -81,7 +68,12 @@ public class KPA400PhotoShare extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa400_photo_share);
 
-        ButterKnife.bind(this);
+        mThumbnail = (ImageView) findViewById(R.id.thumbnail);
+        mName = (EditText) findViewById(R.id.input_name);
+        mEmail = (EditText) findViewById(R.id.input_email);
+        mDescription = (EditText) findViewById(R.id.input_description);
+        mContentWrapper = (ScrollView) findViewById(R.id.content_wrapper);
+        mPlaceholderWarning = (TextView) findViewById(R.id.placeholder_warning);
     }
 
     @Override

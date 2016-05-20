@@ -10,23 +10,17 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA300ContactUs extends AppCompatActivity {
 
-    @BindView(R.id.input_name)
     EditText mName;
 
-    @BindView(R.id.input_email)
     EditText mEmail;
 
-    @BindView(R.id.input_subject)
     EditText mSubject;
 
-    @BindView(R.id.input_message)
     EditText mMessage;
 
 
@@ -36,7 +30,10 @@ public class KPA300ContactUs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa300_contact_us);
 
-        ButterKnife.bind(this);
+        mName = (EditText) findViewById(R.id.input_name);
+        mEmail = (EditText) findViewById(R.id.input_email);
+        mSubject = (EditText) findViewById(R.id.input_subject);
+        mMessage = (EditText) findViewById(R.id.input_message);
     }
 
     @Override

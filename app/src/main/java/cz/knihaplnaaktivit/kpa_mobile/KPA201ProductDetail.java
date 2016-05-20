@@ -24,8 +24,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductImageRepository;
@@ -36,17 +34,14 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
     public static final String ITEM_ID_KEY = "itemId";
 
-    @BindView(R.id.image_prev_wrapper)
     LinearLayout mImageWrapper;
 
     View mImageScrollWrapperHorizontal;
 
     View mImageScrollWrapper;
 
-    @BindView(R.id.description)
     TextView mDescription;
 
-    @BindView(R.id.price)
     TextView mPrice;
 
     private int mProductId;
@@ -69,7 +64,9 @@ public class KPA201ProductDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa201_product_detail);
 
-        ButterKnife.bind(this);
+        mImageWrapper = (LinearLayout) findViewById(R.id.image_prev_wrapper);
+        mDescription = (TextView) findViewById(R.id.description);
+        mPrice = (TextView) findViewById(R.id.price);
 
         mImageScrollWrapperHorizontal = findViewById(R.id.image_prev_scroll_wrapper);
         mImageScrollWrapper = findViewById(R.id.image_prev_scroll_wrapper_land);

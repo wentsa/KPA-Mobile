@@ -16,8 +16,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
@@ -27,20 +25,20 @@ public class KPA100Dashboard extends AppCompatActivity {
 
     private static boolean isAlreadySynchronized = false;
 
-    @BindView(R.id.sync_wrapper)
     RelativeLayout mSyncWrapper;
 
-    @BindView(R.id.dashboard_wrapper)
     ScrollView mDashboardWrapper;
 
-    @BindView(R.id.sync_icon)
     ImageView mSyncIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa100_dashboard);
-        ButterKnife.bind(this);
+
+        mSyncWrapper = (RelativeLayout) findViewById(R.id.sync_wrapper);
+        mDashboardWrapper = (ScrollView) findViewById(R.id.dashboard_wrapper);
+        mSyncIcon = (ImageView) findViewById(R.id.sync_icon);
 
         if(!isAlreadySynchronized) {
             synchronize();

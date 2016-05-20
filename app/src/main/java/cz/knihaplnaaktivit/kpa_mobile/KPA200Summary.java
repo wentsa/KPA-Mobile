@@ -9,18 +9,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cz.knihaplnaaktivit.kpa_mobile.adapters.KPA200ExpendableListAdapter;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
 
 public class KPA200Summary extends AppCompatActivity {
 
-    @BindView(R.id.list)
     ExpandableListView mList;
 
-    @BindView(R.id.placeholder_summary)
     TextView mPlaceholder;
 
     private int mPrevExpanded = -1;
@@ -32,7 +28,8 @@ public class KPA200Summary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa200_summary);
 
-        ButterKnife.bind(this);
+        mList = (ExpandableListView) findViewById(R.id.list);
+        mPlaceholder = (TextView) findViewById(R.id.placeholder_summary);
 
         List<Product> products = ProductRepository.getProducts(this);
         if(products.isEmpty()) {
