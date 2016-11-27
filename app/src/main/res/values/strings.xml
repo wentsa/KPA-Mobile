@@ -3,7 +3,78 @@
     <string name="app_name_shortcut">KPA</string>
 
     <string name="dashboard_summary">Přehled pomůcek</string>
-    <string name="dashboard_contact">Kontaktovat</string>
-    <string name="dashboard_share">Sdílet foto</string>
+    <string name="dashboard_contact">Napište nám</string>
+    <string name="dashboard_share">Sdílejte foto</string>
     <string name="dashboard_about">O nás</string>
+
+    <string name="title_activity_kpa200_summary">@string/dashboard_summary</string>
+    <string name="title_activity_kpa201_product_detail">Detail produktu</string>
+    <string name="title_activity_kpa300_contact_us">@string/dashboard_contact</string>
+    <string name="title_activity_kpa400_photo_share">@string/dashboard_share</string>
+    <string name="title_activity_kpa500_about">@string/dashboard_about</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec vitae arcu. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Aliquam id dolor. Aliquam ornare wisi eu metus. Nulla pulvinar eleifend sem. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Integer malesuada. Aliquam erat volutpat. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Ut tempus purus at lorem. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Donec iaculis gravida nulla. Mauris dictum facilisis augue. Suspendisse nisl. Etiam neque. Aenean vel massa quis mauris vehicula lacinia. Nunc tincidunt ante vitae massa. Etiam commodo dui eget wisi. Morbi scelerisque luctus velit. Nam quis nulla. Aliquam erat volutpat. Duis condimentum augue id magna semper rutrum. Quisque tincidunt scelerisque libero. Aliquam erat volutpat. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Nam quis nulla. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Fusce tellus. Etiam commodo dui eget wisi. Cras pede libero, dapibus nec, pretium sit amet, tempor quis.
+        Fusce tellus. Aliquam erat volutpat. In convallis. Praesent id justo in neque elementum ultrices. Aenean id metus id velit ullamcorper pulvinar. Fusce tellus. Fusce suscipit libero eget elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nulla accumsan, elit sit amet varius semper, nulla mauris mollis quam, tempor suscipit diam nulla vel leo. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Nulla pulvinar eleifend sem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent id justo in neque elementum ultrices. Etiam dictum tincidunt diam. Integer lacinia. Nullam dapibus fermentum ipsum. Etiam posuere lacus quis dolor.
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est. Nullam rhoncus aliquam metus. Donec vitae arcu. Nulla est. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Aenean fermentum risus id tortor. Aenean vel massa quis mauris vehicula lacinia. Etiam bibendum elit eget erat. Nullam dapibus fermentum ipsum. Integer lacinia.
+        Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Et harum quidem rerum facilis est et expedita distinctio. Fusce aliquam vestibulum ipsum. Vestibulum fermentum tortor id mi. Donec quis nibh at felis congue commodo. Mauris tincidunt sem sed arcu. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Maecenas aliquet accumsan leo. In dapibus augue non sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Etiam bibendum elit eget erat. Etiam posuere lacus quis dolor. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui.
+    </string>
+
+    <string name="currency">Kč</string>
+    <string name="show_on_web">Přejít na web</string>
+    <string name="send">Odeslat</string>
+    <string name="your_email">Váš email</string>
+    <string name="description">Popisek</string>
+
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+
+    <string name="permission_explanation_title">Používání fotoaparátu</string>
+    <string name="permission_explanation_message">Pro sdílení Vašich fotografií je nutné nejprve přidělit příslušná oprávnění. Přejete si tak udělat?</string>
+    <string name="browse">Procházet</string>
+    <string name="camera">Vyfotit</string>
+    <string name="placeholder_warning">Sdílejte s námi své zážitky, které jste prožili při práci s našimi pomůckami. Vyberte prosím Vaši fotografii nebo vyfoťte novou.</string>
+    <string name="email_invalid_title">Neplatný email</string>
+    <string name="email_invalid_message">Zadejte prosím platnou emailovou adresu</string>
+    <string name="description_empty_title">Prázdný popisek</string>
+    <string name="description_empty_message">Sdělte nám prosím svůj příběh ohledně vybrané fotografie. Děkujeme.</string>
+    <string name="name_empty_title">Prázdné jméno</string>
+    <string name="name_empty_message">Uveďte prosím své jméno</string>
+    <string name="subject_empty_title">Prázdný předmět</string>
+    <string name="subject_empty_message">Zadejte prosím předmět zprávy</string>
+    <string name="message_empty_title">Prázdná zpráva</string>
+    <string name="message_empty_message">Vyplňte prosím Vaši zprávu</string>
+    <string name="ok">OK</string>
+    <string name="photo_upload">Nahrávání fotografie</string>
+    <string name="send_image_ok">Děkujeme. Fotografie bude nahrána.</string>
+    <string name="send_image_not_ok">Nepodařilo se zahájit nahrávání.</string>
+    <string name="send_image_not_ok2">Nepodařilo se nahrát fotografii.</string>
+    <string name="photo_upload_description">Fotografie je odesílána</string>
+    <string name="upload_fail_permission_not_granted">Nepodařilo se nahrát fotografii. Udělte prosím aplikaci potřebná oprávnění.</string>
+    <string name="upload_fail_not_found">Nepodařilo se nahrát fotografii. Zřejmě byla smazána.</string>
+    <string name="no_internet_title">Bez připojení</string>
+    <string name="no_internet_message">Pro odeslání fotografie se připojte k internetu.</string>
+    <string name="your_name">Vaše jméno</string>
+    <string name="no_wifi_title">Žádná wifi</string>
+    <string name="no_wifi_message">Pro odesílání fotografie doporučujeme používat wifi připojení. Přejete si pokračovat?</string>
+    <string name="subject">Předmět</string>
+    <string name="text">Text</string>
+    <string name="your_message">Vaše zpráva</string>
+
+    <string name="send_message_ok">Děkujeme. Vaše zpráva bude odeslána.</string>
+    <string name="no_internet_message_message">Pro odeslání zprávy se připojte k internetu.</string>
+    <string name="send_message_not_ok">Nepodařilo se odeslat zprávu</string>
+    <string name="message_upload">Odesílání zprávy</string>
+    <string name="message_upload_description">Zpráva se právě odesílá</string>
+    <string name="contact">Ing. Michaela Fürstová\nČajkovského 21\nŘíčany, 251 01\nIČ: 03746861 (Podnikatel zapsán v živnostenském rejstříku MÚ Říčany)</string>
+    <string name="facebook_page">Facebooková stránka</string>
+    <string name="facebook_group">Facebooková skupina</string>
+    <string name="no_mail_client">Nenalezen žádný emailový klient. Adresa zkopírována do schránky.</string>
+    <string name="sync_in_progress">Probíhá synchronizace...</string>
+    <string name="without_connection">Bez připojení k internetu</string>
+    <string name="crash_toast_text">Nastala chyba, odešlete nám prosím detailní info a my se ji pokusíme co nejdříve napravit. Děkujeme</string>
+    <string name="summary_no_products_error">Pro zobrazení seznamu našich pomůcek se nejdříve připojte k internetu.</string>
+    <string name="placeholder_summary_no_images">Pro stažení obrázků se připojte k síti WiFi.</string>
+
+
 </resources>

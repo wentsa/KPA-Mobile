@@ -1,19 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cz.knihaplnaaktivit.kpa_mobile" >
+    package="cz.knihaplnaaktivit.kpa_mobile">
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".KPA100Dashboard" >
+        android:theme="@style/AppTheme"
+        android:name="cz.knihaplnaaktivit.kpa_mobile.KPAApplication">
+
+        <service android:name=".connectors.services.ServiceSendImage"
+            android:exported="false"
+            android:icon="@drawable/ic_upload_black_24dp"
+            android:label="@string/photo_upload"/>
+        <service android:name=".connectors.services.ServiceSendMessage"
+            android:exported="false"
+            android:icon="@drawable/ic_upload_black_24dp"
+            android:label="@string/message_upload"/>
+
+        <receiver android:name=".KPAApplication$ConnectedReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".KPA100Dashboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".KPA200Summary"
+            android:label="@string/title_activity_kpa200_summary"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
+        </activity>
+        <activity
+            android:name=".KPA201ProductDetail"
+            android:label="@string/title_activity_kpa201_product_detail"
+            android:parentActivityName=".KPA200Summary">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA200Summary" />
+        </activity>
+        <activity
+            android:name=".KPA300ContactUs"
+            android:label="@string/title_activity_kpa300_contact_us"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
+        </activity>
+        <activity
+            android:name=".KPA400PhotoShare"
+            android:label="@string/title_activity_kpa400_photo_share"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
+        </activity>
+        <activity
+            android:name=".KPA500About"
+            android:label="@string/title_activity_kpa500_about"
+            android:parentActivityName=".KPA100Dashboard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.knihaplnaaktivit.kpa_mobile.KPA100Dashboard" />
         </activity>
     </application>
 
