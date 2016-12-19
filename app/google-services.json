@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "234245794572",
+    "firebase_url": "https://kniha-plna-aktivit.firebaseio.com",
+    "project_id": "kniha-plna-aktivit",
+    "storage_bucket": "kniha-plna-aktivit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234245794572:android:4a91f673ae4e9fb7",
+        "android_client_info": {
+          "package_name": "cz.knihaplnaaktivit.kpa_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234245794572-f283gmou8l92vbs9pp5540irbhekp5a4.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "234245794572-pkona4pme9rsvrmk8361e0d0uvr9q7t1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKetSepZwqlOg3Rkk6OciAHoaFY8y88Lo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-67977312-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

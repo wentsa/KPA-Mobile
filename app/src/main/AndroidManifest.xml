@@ -26,6 +26,13 @@
             android:exported="false"
             android:icon="@drawable/ic_upload_black_24dp"
             android:label="@string/message_upload"/>
+        <!-- defaultni hodnoty pro push notifikace -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/icon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
         <receiver android:name=".KPAApplication$ConnectedReceiver">
             <intent-filter>
