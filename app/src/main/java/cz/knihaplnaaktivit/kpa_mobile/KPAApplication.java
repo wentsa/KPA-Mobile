@@ -27,6 +27,7 @@ public class KPAApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        startService(new Intent(this, ServiceInfinite.class));
     }
 
     @Override
@@ -54,7 +55,7 @@ public class KPAApplication extends Application {
                         ApiConnector.synchronize(context, true);
                         return null;
                     }
-                }.execute();
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }
     }

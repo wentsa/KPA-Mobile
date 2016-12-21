@@ -96,7 +96,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
                     super.onPostExecute(aVoid);
                     loadProductDetail();
                 }
-            }.execute();
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 

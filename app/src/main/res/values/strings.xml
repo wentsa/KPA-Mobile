@@ -6,6 +6,7 @@
     <string name="dashboard_contact">Napište nám</string>
     <string name="dashboard_share">Sdílejte foto</string>
     <string name="dashboard_about">O nás</string>
+    <string name="dashboard_share_app">Dejte o nás vědět</string>
 
     <string name="title_activity_kpa200_summary">@string/dashboard_summary</string>
     <string name="title_activity_kpa201_product_detail">Detail produktu</string>
@@ -19,6 +20,8 @@
         Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est. Nullam rhoncus aliquam metus. Donec vitae arcu. Nulla est. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Aenean fermentum risus id tortor. Aenean vel massa quis mauris vehicula lacinia. Etiam bibendum elit eget erat. Nullam dapibus fermentum ipsum. Integer lacinia.
         Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Et harum quidem rerum facilis est et expedita distinctio. Fusce aliquam vestibulum ipsum. Vestibulum fermentum tortor id mi. Donec quis nibh at felis congue commodo. Mauris tincidunt sem sed arcu. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Maecenas aliquet accumsan leo. In dapibus augue non sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Etiam bibendum elit eget erat. Etiam posuere lacus quis dolor. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui.
     </string>
+
+    <string name="share_app_text">Aplikace s didaktickými pomůckámi pro děti!</string>
 
     <string name="currency">Kč</string>
     <string name="show_on_web">Přejít na web</string>
@@ -70,7 +73,7 @@
     <string name="facebook_page">Facebooková stránka</string>
     <string name="facebook_group">Facebooková skupina</string>
     <string name="no_mail_client">Nenalezen žádný emailový klient. Adresa zkopírována do schránky.</string>
-    <string name="sync_in_progress">Probíhá synchronizace...</string>
+    <string name="sync_in_progress">Probíhá synchronizace</string>
     <string name="without_connection">Bez připojení k internetu</string>
     <string name="crash_toast_text">Nastala chyba, odešlete nám prosím detailní info a my se ji pokusíme co nejdříve napravit. Děkujeme</string>
     <string name="summary_no_products_error">Pro zobrazení seznamu našich pomůcek se nejdříve připojte k internetu.</string>

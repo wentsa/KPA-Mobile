@@ -2,9 +2,10 @@ package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -16,6 +17,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.List;
 
@@ -33,6 +39,9 @@ public class KPA100Dashboard extends AppCompatActivity {
     ImageView mSyncIcon;
 
     private Tracker mTracker;
+    private GoogleApiClient client;
+
+    private static final int REQUEST_INVITE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +55,20 @@ public class KPA100Dashboard extends AppCompatActivity {
         KPAApplication application = (KPAApplication) getApplication();
         mTracker = application.getDefaultTracker();
 
-        if(!isAlreadySynchronized) {
+
+        if (!isAlreadySynchronized) {
             synchronize();
         } else {
             mSyncWrapper.setVisibility(View.GONE);
             mDashboardWrapper.setVisibility(View.VISIBLE);
         }
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void synchronize() {
         animateSyncIcon();
 
-        if(Utils.isOnline(this)) {
+        if (Utils.isOnline(this)) {
             // updates product info, after finish user is not blocked anymore and image sync in background is started
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -79,7 +90,7 @@ public class KPA100Dashboard extends AppCompatActivity {
                         @Override
                         protected Void doInBackground(Void... params) {
                             List<Product> products = ProductRepository.getProducts(KPA100Dashboard.this);
-                            for(Product p : products) {
+                            for (Product p : products) {
                                 ApiConnector.updateProductsImages(KPA100Dashboard.this, p.getId());
                             }
                             return null;
@@ -90,10 +101,9 @@ public class KPA100Dashboard extends AppCompatActivity {
                             super.onPostExecute(aVoid);
                             isAlreadySynchronized = true;
                         }
-                    }.execute();
+                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
-            }.execute();
-
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             Toast.makeText(KPA100Dashboard.this, R.string.without_connection, Toast.LENGTH_SHORT).show();
             mSyncWrapper.setVisibility(View.GONE);
@@ -103,7 +113,7 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
     private void animateSyncIcon() {
-        RotateAnimation anim = new RotateAnimation(0f, 360f,  Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation anim = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setInterpolator(new LinearInterpolator());
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(1200);
@@ -115,7 +125,7 @@ public class KPA100Dashboard extends AppCompatActivity {
         super.onResume();
 
         View button = findViewById(R.id.share_photo_wrapper);
-        if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             button.setVisibility(View.VISIBLE);
         } else {
             button.setVisibility(View.GONE);
@@ -145,9 +155,44 @@ public class KPA100Dashboard extends AppCompatActivity {
         Utils.visitFacebook(this, "www.knihaplnaaktivit.cz", "1552685675006861", true);
     }
 
+    // firebase invite
+    public void onShareWithFriendsClicked(View view) {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.app_name))
+                .setMessage(getString(R.string.share_app_text))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
+    }
+
     private void navigate(Class cls) {
         Intent intent = new Intent(this, cls);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_down, R.anim.stay);
     }
+
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Kniha plná aktivit")
+                .setUrl(Uri.parse("http://www.knihaplnaaktivit.cz"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+
 }

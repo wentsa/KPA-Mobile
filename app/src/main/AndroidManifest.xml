@@ -26,13 +26,19 @@
             android:exported="false"
             android:icon="@drawable/ic_upload_black_24dp"
             android:label="@string/message_upload"/>
+        <service android:name=".ServiceInfinite"
+            android:exported="false"/>
+
         <!-- defaultni hodnoty pro push notifikace -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/icon" />
+            android:resource="@drawable/notif_icon" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <receiver android:name=".KPAApplication$ConnectedReceiver">
             <intent-filter>
@@ -45,6 +51,16 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="knihaplnaaktivit.cz"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
