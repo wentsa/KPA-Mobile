@@ -58,9 +58,9 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="knihaplnaaktivit.cz"
-                    android:scheme="http" />
+                <data android:scheme="http" android:host="www.knihaplnaaktivit.cz" />
+                <data android:scheme="https" android:host="www.knihaplnaaktivit.cz" />
+
             </intent-filter>
         </activity>
         <activity
