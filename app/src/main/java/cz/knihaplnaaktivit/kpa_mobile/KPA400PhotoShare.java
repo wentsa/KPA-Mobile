@@ -58,6 +58,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
     }
 
     private String mImagePath;
+    private boolean mIsPictureLoaded;
 
     ImageView mThumbnail;
     EditText mName;
@@ -93,12 +94,12 @@ public class KPA400PhotoShare extends AppCompatActivity {
     }
 
     private void triggerContentVisibility() {
-        if(mImagePath == null) {
-            mContentWrapper.setVisibility(View.GONE);
-            mPlaceholderWarning.setVisibility(View.VISIBLE);
-        } else {
+        if(mIsPictureLoaded) {
             mContentWrapper.setVisibility(View.VISIBLE);
             mPlaceholderWarning.setVisibility(View.GONE);
+        } else {
+            mContentWrapper.setVisibility(View.GONE);
+            mPlaceholderWarning.setVisibility(View.VISIBLE);
         }
     }
 
@@ -157,6 +158,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
             // does app have permission?
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 File f = createImageFile();
+                mIsPictureLoaded = false;
                 if (f != null) {
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -188,7 +190,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
      * API SEND
      */
     private void send() {
-        if(mImagePath != null) {
+        if(mImagePath != null && mIsPictureLoaded) {
             // validations
             final String name = mName.getText().toString();
             if(TextUtils.isEmpty(name)) {
@@ -327,7 +329,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
             Uri contentUri = Uri.fromFile(f);
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
             this.sendBroadcast(mediaScanIntent);
-
+            mIsPictureLoaded = true;
             fillForm();
         } else if(requestCode == REQUEST_IMAGE_BROWSE && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
@@ -341,7 +343,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 mImagePath = cursor.getString(columnIndex);
                 cursor.close();
-
+                mIsPictureLoaded = true;
                 fillForm();
             }
         }
