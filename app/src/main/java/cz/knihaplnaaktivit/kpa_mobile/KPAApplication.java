@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.os.AsyncTaskCompat;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -49,13 +50,13 @@ public class KPAApplication extends Application {
         @Override
         public void onReceive(final Context context, Intent intent) {
             if (Utils.isOnline(context)){
-                new AsyncTask<Void, Void, Void>() {
+                AsyncTaskCompat.executeParallel(new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
                         ApiConnector.synchronize(context, true);
                         return null;
                     }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                });
             }
         }
     }

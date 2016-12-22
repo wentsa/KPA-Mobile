@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,6 +23,7 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
@@ -55,7 +57,6 @@ public class KPA100Dashboard extends AppCompatActivity {
         KPAApplication application = (KPAApplication) getApplication();
         mTracker = application.getDefaultTracker();
 
-
         if (!isAlreadySynchronized) {
             synchronize();
         } else {
@@ -70,7 +71,7 @@ public class KPA100Dashboard extends AppCompatActivity {
 
         if (Utils.isOnline(this)) {
             // updates product info, after finish user is not blocked anymore and image sync in background is started
-            new AsyncTask<Void, Void, Void>() {
+            AsyncTaskCompat.executeParallel(new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     ApiConnector.synchronize(KPA100Dashboard.this, false);
@@ -86,7 +87,7 @@ public class KPA100Dashboard extends AppCompatActivity {
                     mSyncIcon.setAnimation(null);
 
                     // updates images
-                    new AsyncTask<Void, Void, Void>() {
+                    AsyncTaskCompat.executeParallel(new AsyncTask<Void, Void, Void>() {
                         @Override
                         protected Void doInBackground(Void... params) {
                             List<Product> products = ProductRepository.getProducts(KPA100Dashboard.this);
@@ -101,9 +102,9 @@ public class KPA100Dashboard extends AppCompatActivity {
                             super.onPostExecute(aVoid);
                             isAlreadySynchronized = true;
                         }
-                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    });
                 }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            });
         } else {
             Toast.makeText(KPA100Dashboard.this, R.string.without_connection, Toast.LENGTH_SHORT).show();
             mSyncWrapper.setVisibility(View.GONE);

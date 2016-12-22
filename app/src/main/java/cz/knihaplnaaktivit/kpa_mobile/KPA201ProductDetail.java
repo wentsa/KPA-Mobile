@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -84,7 +85,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
         }
 
         if(Utils.isOnline(this)) {
-            new AsyncTask<Void, Void, Void>() {
+            AsyncTaskCompat.executeParallel(new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     ApiConnector.updateProductsImages(KPA201ProductDetail.this, mProductId);
@@ -96,7 +97,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
                     super.onPostExecute(aVoid);
                     loadProductDetail();
                 }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            });
         }
     }
 
