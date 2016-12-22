@@ -152,16 +152,38 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
     public void onBtnFacebookClicked(View v) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Dashboard")
+                .setAction("Facebook")
+                .build());
+
         Utils.visitFacebook(this, "www.knihaplnaaktivit.cz", "1552685675006861", true);
     }
 
     // firebase invite
     public void onShareWithFriendsClicked(View view) {
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Dashboard")
+                .setAction("Invite")
+                .build());
+
         Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.app_name))
                 .setMessage(getString(R.string.share_app_text))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_INVITE) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(this, getString(R.string.invite_failed), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     private void navigate(Class cls) {
         Intent intent = new Intent(this, cls);
