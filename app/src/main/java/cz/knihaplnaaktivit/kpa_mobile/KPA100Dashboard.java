@@ -194,7 +194,7 @@ public class KPA100Dashboard extends AppCompatActivity {
 
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
-                .setName("Kniha plná aktivit")
+                .setName(getString(R.string.app_name))
                 .setUrl(Uri.parse("http://www.knihaplnaaktivit.cz"))
                 .build();
         return new Action.Builder(Action.TYPE_VIEW)
