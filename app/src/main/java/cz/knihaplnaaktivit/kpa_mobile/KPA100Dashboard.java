@@ -23,7 +23,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
@@ -168,7 +167,7 @@ public class KPA100Dashboard extends AppCompatActivity {
                 .setAction("Invite")
                 .build());
 
-        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.app_name))
+        Intent intent = new AppInviteInvitation.IntentBuilder("KPA")
                 .setMessage(getString(R.string.share_app_text))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
