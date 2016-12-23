@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "234245794572-sd6jlajtta41edrcvlo47l4vj1oefnra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.knihaplnaaktivit.kpa_mobile",
+            "certificate_hash": "5E8055F2CF97A25CF16CD41A18B2B654EC022F73"
+          }
+        },
+        {
           "client_id": "234245794572-9t9a8iskpod5gid78pug4palm836f8bh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
