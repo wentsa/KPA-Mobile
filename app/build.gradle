@@ -25,6 +25,7 @@ android {
             keyPassword RELEASE_PASSWORD // gradle.properties (in root directory)
         }
     }
+    // app\build\outputs\apk
     buildTypes {
         release {
             minifyEnabled true
