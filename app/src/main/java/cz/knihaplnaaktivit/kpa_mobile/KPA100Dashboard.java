@@ -23,6 +23,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 
@@ -55,6 +57,9 @@ public class KPA100Dashboard extends AppCompatActivity {
 
         KPAApplication application = (KPAApplication) getApplication();
         mTracker = application.getDefaultTracker();
+
+        FirebaseApp.initializeApp(this);
+        FirebaseMessaging.getInstance().subscribeToTopic("testOnly");
 
         if (!isAlreadySynchronized) {
             synchronize();
