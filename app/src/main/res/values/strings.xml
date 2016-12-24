@@ -79,8 +79,8 @@
     <string name="summary_no_products_error">Pro zobrazení seznamu našich pomůcek se nejdříve připojte k internetu.</string>
     <string name="placeholder_summary_no_images">Pro stažení obrázků se připojte k síti WiFi.</string>
     <string name="invite_failed">Pozvánku se nepodařilo odeslat</string>
-    <string name="permission_sms_explanation_title">qwe</string>
-    <string name="permission_sms_explanation_message">qwe</string>
+    <string name="share_app_deep_link">"http://knihaplnaaktivit.cz"</string>
+    <string name="share_app_button_text">INSTALOVAT</string>
 
 
 </resources>

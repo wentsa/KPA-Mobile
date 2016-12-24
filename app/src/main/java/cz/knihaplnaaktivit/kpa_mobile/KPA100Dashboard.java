@@ -174,6 +174,8 @@ public class KPA100Dashboard extends AppCompatActivity {
 
         Intent intent = new AppInviteInvitation.IntentBuilder("KPA")
                 .setMessage(getString(R.string.share_app_text))
+                .setCallToActionText(getString(R.string.share_app_button_text))
+                .setDeepLink(Uri.parse(getString(R.string.share_app_deep_link)))
                 .build();
         startActivityForResult(intent, REQUEST_INVITE);
     }

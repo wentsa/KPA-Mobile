@@ -8,8 +8,8 @@ android {
         applicationId "cz.knihaplnaaktivit.kpa_mobile"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.0.8"
+        versionCode 10
+        versionName "1.0.9"
     }
     signingConfigs {
         debug {
@@ -25,6 +25,7 @@ android {
             keyPassword RELEASE_PASSWORD // gradle.properties (in root directory)
         }
     }
+    // app\build\outputs\apk
     buildTypes {
         release {
             minifyEnabled true
