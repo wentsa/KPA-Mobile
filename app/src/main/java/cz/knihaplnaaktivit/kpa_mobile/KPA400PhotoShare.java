@@ -41,6 +41,10 @@ public class KPA400PhotoShare extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_BROWSE = 2;
+    private static final String IMAGE_PATH_STATE = "path";
+    private static final String NAME_STATE = "name";
+    private static final String EMAIL_STATE = "email";
+    private static final String DESCRIPTION_STATE = "description";
 
     private enum PermissionRequestType {
 
@@ -91,6 +95,31 @@ public class KPA400PhotoShare extends AppCompatActivity {
         triggerContentVisibility();
         mTracker.setScreenName("KPA400PhotoShare");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(mImagePath != null && mIsPictureLoaded) {
+            outState.putString(IMAGE_PATH_STATE, mImagePath);
+            outState.putString(NAME_STATE, mName.getText().toString());
+            outState.putString(EMAIL_STATE, mEmail.getText().toString());
+            outState.putString(DESCRIPTION_STATE, mDescription.getText().toString());
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(!TextUtils.isEmpty(savedInstanceState.getString(IMAGE_PATH_STATE))) {
+            mImagePath = savedInstanceState.getString(IMAGE_PATH_STATE);
+            mName.setText(savedInstanceState.getString(NAME_STATE));
+            mEmail.setText(savedInstanceState.getString(EMAIL_STATE));
+            mDescription.setText(savedInstanceState.getString(DESCRIPTION_STATE));
+            mIsPictureLoaded = true;
+            fillForm();
+        }
     }
 
     private void triggerContentVisibility() {

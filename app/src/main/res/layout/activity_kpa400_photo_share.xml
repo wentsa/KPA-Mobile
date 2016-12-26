@@ -56,10 +56,10 @@
                     android:inputType="text"
                     app:layout_columnWeight="1"
                     android:nextFocusUp="@+id/input_description"
-                    android:nextFocusDown="@id/input_description"
+                    android:nextFocusDown="@id/input_email"
                     android:nextFocusLeft="@id/input_description"
-                    android:nextFocusRight="@id/input_description"
-                    android:nextFocusForward="@id/input_description"/>
+                    android:nextFocusRight="@id/input_email"
+                    android:nextFocusForward="@id/input_email"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -73,9 +73,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     app:layout_columnWeight="1"
-                    android:nextFocusUp="@+id/input_description"
+                    android:nextFocusUp="@+id/input_name"
                     android:nextFocusDown="@id/input_description"
-                    android:nextFocusLeft="@id/input_description"
+                    android:nextFocusLeft="@id/input_name"
                     android:nextFocusRight="@id/input_description"
                     android:nextFocusForward="@id/input_description"/>
 
@@ -92,10 +92,10 @@
                     android:inputType="textMultiLine"
                     app:layout_columnWeight="1"
                     android:nextFocusUp="@id/input_email"
-                    android:nextFocusDown="@id/input_email"
+                    android:nextFocusDown="@id/input_name"
                     android:nextFocusLeft="@id/input_email"
-                    android:nextFocusRight="@id/input_email"
-                    android:nextFocusForward="@id/input_email"/>
+                    android:nextFocusRight="@id/input_name"
+                    android:nextFocusForward="@id/input_name"/>
 
             </android.support.v7.widget.GridLayout>
         </LinearLayout>
