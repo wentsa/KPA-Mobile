@@ -1,6 +1,7 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -37,6 +38,11 @@ public class KPA300ContactUs extends AppCompatActivity {
 
         KPAApplication application = (KPAApplication) getApplication();
         mTracker = application.getDefaultTracker();
+
+        Intent i = getIntent();
+        if(i != null && !TextUtils.isEmpty(i.getStringExtra(KPA201ProductDetail.PRODUCT_NAME))) {
+            mSubject.setText(getString(R.string.order_subject, i.getStringExtra(KPA201ProductDetail.PRODUCT_NAME)));
+        }
     }
 
     @Override

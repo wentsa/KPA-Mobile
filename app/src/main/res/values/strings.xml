@@ -81,6 +81,7 @@
     <string name="invite_failed">Pozvánku se nepodařilo odeslat</string>
     <string name="share_app_deep_link">"http://knihaplnaaktivit.cz"</string>
     <string name="share_app_button_text">INSTALOVAT</string>
-
+    <string name="place_order">Objednat</string>
+    <string name="order_subject">Objednávka - %1$s</string>
 
 </resources>

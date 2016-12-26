@@ -37,6 +37,7 @@ import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 public class KPA201ProductDetail extends AppCompatActivity {
 
     public static final String ITEM_ID_KEY = "itemId";
+    static final String PRODUCT_NAME = "productName";
 
     LinearLayout mImageWrapper;
     View mImageScrollWrapperHorizontal;
@@ -200,6 +201,19 @@ public class KPA201ProductDetail extends AppCompatActivity {
                     if(intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
                     }
+                }
+                return true;
+            }
+            case R.id.shop: {
+                if(mProduct != null) {
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Product detail")
+                            .setAction("Order")
+                            .build());
+
+                    Intent intent = new Intent(this, KPA300ContactUs.class);
+                    intent.putExtra(PRODUCT_NAME, mProduct.getName());
+                    startActivity(intent);
                 }
                 return true;
             }
