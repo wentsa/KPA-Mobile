@@ -59,9 +59,12 @@ public class ApiConnector {
      * @param ctx context
      */
     public static void updateProductsInfo(Context ctx) {
-        SQLiteDatabase db = new KPADatabase(ctx).getReadableDatabase();
-        int actualVersion = DatabaseUtils.getProductVersionInfo(db);
-        db.close();
+        int actualVersion;
+        synchronized (KPADatabase.DB_LOCK) {
+            SQLiteDatabase db = new KPADatabase(ctx).getReadableDatabase();
+            actualVersion = DatabaseUtils.getProductVersionInfo(db);
+            db.close();
+        }
 
         try {
             Map<String, String> params = new HashMap<>();
@@ -99,30 +102,32 @@ public class ApiConnector {
     }
 
     private static void replaceProductsInDb(List<Product> productsNew, int version, Context ctx) {
-        SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
+        synchronized(KPADatabase.DB_LOCK) {
+            SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
 
-        db.delete(KPADatabase.ProductColumns.TABLE_NAME, null, null);
+            db.delete(KPADatabase.ProductColumns.TABLE_NAME, null, null);
 
-        Set<Integer> idSet = new HashSet<>();
+            Set<Integer> idSet = new HashSet<>();
 
-        for (Product p : productsNew) {
-            idSet.add(p.getId());
+            for (Product p : productsNew) {
+                idSet.add(p.getId());
 
-            ContentValues values = new ContentValues();
-            values.put(KPADatabase.ProductColumns._ID, p.getId());
-            values.put(KPADatabase.ProductColumns.COLUMN_NAME_NAME, p.getName());
-            values.put(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION, p.getDescription());
-            values.put(KPADatabase.ProductColumns.COLUMN_NAME_PRICE, p.getPrice());
-            values.put(KPADatabase.ProductColumns.COLUMN_NAME_URL, p.getWebUrl());
+                ContentValues values = new ContentValues();
+                values.put(KPADatabase.ProductColumns._ID, p.getId());
+                values.put(KPADatabase.ProductColumns.COLUMN_NAME_NAME, p.getName());
+                values.put(KPADatabase.ProductColumns.COLUMN_NAME_DESCRIPTION, p.getDescription());
+                values.put(KPADatabase.ProductColumns.COLUMN_NAME_PRICE, p.getPrice());
+                values.put(KPADatabase.ProductColumns.COLUMN_NAME_URL, p.getWebUrl());
 
-            db.insert(KPADatabase.ProductColumns.TABLE_NAME, null, values);
+                db.insert(KPADatabase.ProductColumns.TABLE_NAME, null, values);
+            }
+
+            DatabaseUtils.setProductVersionInfo(db, version);
+
+            removeUnnecesaryImagesFromDb(db, idSet);
+
+            db.close();
         }
-
-        DatabaseUtils.setProductVersionInfo(db, version);
-
-        removeUnnecesaryImagesFromDb(db, idSet);
-
-        db.close();
     }
 
     /**
@@ -172,9 +177,13 @@ public class ApiConnector {
      * @param productId product id
      */
     public static void updateProductsImages(Context ctx, int productId) {
-        SQLiteDatabase db = new KPADatabase(ctx).getReadableDatabase();
-        int actualVersion = DatabaseUtils.getProductImageVersionInfo(db, productId);
-        db.close();
+        int actualVersion;
+
+        synchronized (KPADatabase.DB_LOCK) {
+            SQLiteDatabase db = new KPADatabase(ctx).getReadableDatabase();
+            actualVersion = DatabaseUtils.getProductImageVersionInfo(db, productId);
+            db.close();
+        }
 
         try {
             Map<String, String> params = new HashMap<>();
@@ -216,22 +225,24 @@ public class ApiConnector {
     }
 
     private static void replaceImagesInDb(List<ImageHolder> imagesNew, int version, int productId, Context ctx) {
-        SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
+        synchronized (KPADatabase.DB_LOCK) {
+            SQLiteDatabase db = new KPADatabase(ctx).getWritableDatabase();
 
-        db.delete(KPADatabase.ProductImageColumns.TABLE_NAME, KPADatabase.ProductImageColumns.COLUMN_NAME_PRODUCT_ID + "=" + productId, null);
+            db.delete(KPADatabase.ProductImageColumns.TABLE_NAME, KPADatabase.ProductImageColumns.COLUMN_NAME_PRODUCT_ID + "=" + productId, null);
 
-        for (ImageHolder img : imagesNew) {
-            ContentValues values = new ContentValues();
-            values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_PRODUCT_ID, productId);
-            values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE, img.image);
-            values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE_ORDER, img.order);
+            for (ImageHolder img : imagesNew) {
+                ContentValues values = new ContentValues();
+                values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_PRODUCT_ID, productId);
+                values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE, img.image);
+                values.put(KPADatabase.ProductImageColumns.COLUMN_NAME_IMAGE_ORDER, img.order);
 
-            db.insert(KPADatabase.ProductImageColumns.TABLE_NAME, null, values);
+                db.insert(KPADatabase.ProductImageColumns.TABLE_NAME, null, values);
+            }
+
+            DatabaseUtils.setProductImageVersionInfo(db, version, productId);
+
+            db.close();
         }
-
-        DatabaseUtils.setProductImageVersionInfo(db, version, productId);
-
-        db.close();
     }
 
     public static void synchronize(Context ctx, boolean withImages) {

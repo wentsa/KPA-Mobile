@@ -9,6 +9,8 @@ import cz.knihaplnaaktivit.kpa_mobile.utilities.Constants;
 
 public class KPADatabase extends SQLiteOpenHelper {
 
+    public static final Object DB_LOCK = new Object();
+
     public KPADatabase(Context ctx) {
         super(ctx, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
     }
