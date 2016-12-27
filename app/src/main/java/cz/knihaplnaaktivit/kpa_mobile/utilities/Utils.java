@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.*;
+import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Looper;
 import android.text.TextUtils;
 
@@ -132,7 +134,7 @@ public class Utils {
      * Transforms null into empty list.
      */
     public static <T> List<T> nullToEmpty(List<T> list) {
-        return list == null ? Collections.EMPTY_LIST : list;
+        return list == null ? Collections.<T> emptyList() : list;
     }
 
     /**
@@ -181,7 +183,7 @@ public class Utils {
      * @param height height to fit or 0 to ignore
      * @return scaled bitmap
      */
-    public static Bitmap getScaledBitmap(Context ctx, int id, int width, int height) {
+    private static Bitmap getScaledBitmap(Context ctx, int id, int width, int height) {
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
