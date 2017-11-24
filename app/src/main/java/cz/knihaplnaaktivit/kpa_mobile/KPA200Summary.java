@@ -7,9 +7,6 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.util.List;
 
 import cz.knihaplnaaktivit.kpa_mobile.adapters.KPA200ExpendableListAdapter;
@@ -25,18 +22,13 @@ public class KPA200Summary extends AppCompatActivity {
 
     private KPA200ExpendableListAdapter mAdapter;
 
-    private Tracker mTracker;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa200_summary);
 
-        mList = (ExpandableListView) findViewById(R.id.list);
-        mPlaceholder = (TextView) findViewById(R.id.placeholder_summary);
-
-        KPAApplication application = (KPAApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+        mList = findViewById(R.id.list);
+        mPlaceholder = findViewById(R.id.placeholder_summary);
 
         List<Product> products = ProductRepository.getProducts(this);
         if(products.isEmpty()) {
@@ -60,13 +52,6 @@ public class KPA200Summary extends AppCompatActivity {
                     mList.collapseGroup(mPrevExpanded);
                 }
                 mPrevExpanded = groupPosition;
-
-                Product selectedItem = (Product) mAdapter.getGroup(groupPosition);
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Summary")
-                        .setAction("Group expand")
-                        .setCustomDimension(1, selectedItem.getName())
-                        .build());
             }
         });
 
@@ -76,12 +61,6 @@ public class KPA200Summary extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Product selectedItem = (Product) mAdapter.getGroup(groupPosition);
 
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Summary")
-                        .setAction("Child click")
-                        .setCustomDimension(1, selectedItem.getName())
-                        .build());
-
                 Intent intent = new Intent(KPA200Summary.this, KPA201ProductDetail.class);
                 intent.putExtra(KPA201ProductDetail.ITEM_ID_KEY, selectedItem.getId());
                 KPA200Summary.this.startActivity(intent);
@@ -90,13 +69,6 @@ public class KPA200Summary extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mTracker.setScreenName("KPA200Summary");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

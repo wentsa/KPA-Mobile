@@ -9,22 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.crashlytics.android.Crashlytics;
 
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA500About extends AppCompatActivity {
 
-    private Tracker mTracker;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa500_about);
-
-        KPAApplication application = (KPAApplication) getApplication();
-        mTracker = application.getDefaultTracker();
     }
 
     @Override
@@ -38,20 +32,10 @@ public class KPA500About extends AppCompatActivity {
     }
 
     public void onMailInfoClicked(View view) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("About")
-                .setAction("Mail info")
-                .build());
-
         sendMail("info@knihaplnaaktivit.cz");
     }
 
     public void onMailObjednavkyClicked(View view) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("About")
-                .setAction("Mail objednavky")
-                .build());
-
         sendMail("objednavky@knihaplnaaktivit.cz");
     }
 
@@ -62,6 +46,7 @@ public class KPA500About extends AppCompatActivity {
         try {
             startActivity(Intent.createChooser(i, null));
         } catch (android.content.ActivityNotFoundException ex) {
+            Crashlytics.logException(ex);
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Email", to);
             clipboard.setPrimaryClip(clip);
@@ -71,27 +56,10 @@ public class KPA500About extends AppCompatActivity {
     }
 
     public void onFbPageClicked(View view) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("About")
-                .setAction("FB page")
-                .build());
-
         Utils.visitFacebook(this, "www.knihaplnaaktivit.cz", "1552685675006861", true);
     }
 
     public void onFbGroupClicked(View view) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("About")
-                .setAction("FB group")
-                .build());
-
         Utils.visitFacebook(this, "groups/909307232454767/", "909307232454767", false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mTracker.setScreenName("KPA500About");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -259,6 +261,7 @@ public class Utils {
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
+            Crashlytics.logException(e);
             ctx.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl)));
         }
     }

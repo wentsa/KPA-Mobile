@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -107,7 +109,9 @@ public class Network {
                     }
                     sb.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
                     first = false;
-                } catch (UnsupportedEncodingException e) {}
+                } catch (UnsupportedEncodingException e) {
+                    Crashlytics.logException(e);
+                }
             }
         }
         return sb.toString();

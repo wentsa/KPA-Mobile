@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,7 +100,9 @@ public class ApiConnector {
                 replaceProductsInDb(productsNew, version, ctx);
             }
 
-        } catch (IOException | JSONException e) {}
+        } catch (IOException | JSONException e) {
+            Crashlytics.logException(e);
+        }
     }
 
     private static void replaceProductsInDb(List<Product> productsNew, int version, Context ctx) {
@@ -221,7 +225,9 @@ public class ApiConnector {
                 LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
             }
 
-        } catch (IOException | JSONException e) {}
+        } catch (IOException | JSONException e) {
+            Crashlytics.logException(e);
+        }
     }
 
     private static void replaceImagesInDb(List<ImageHolder> imagesNew, int version, int productId, Context ctx) {

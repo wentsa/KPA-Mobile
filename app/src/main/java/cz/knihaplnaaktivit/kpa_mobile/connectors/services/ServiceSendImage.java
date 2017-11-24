@@ -14,6 +14,8 @@ import android.util.Base64;
 import android.util.Base64OutputStream;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
@@ -83,6 +85,7 @@ public class ServiceSendImage extends IntentService {
                     imageEncoded = new String(o.toByteArray(), "UTF-8");
                     o.close();
                 } catch (IOException e) {
+                    Crashlytics.logException(e);
                     toast(getString(R.string.send_image_not_ok2));
                     return;
                 }
@@ -98,6 +101,7 @@ public class ServiceSendImage extends IntentService {
                 Network.doPost("send_photo.php", params);
             }
         } catch (Exception e) {
+            Crashlytics.logException(e);
             toast(getString(R.string.send_image_not_ok2));
         } finally {
             stopForeground(true);
