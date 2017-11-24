@@ -2,11 +2,13 @@ package cz.knihaplnaaktivit.kpa_mobile;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -14,19 +16,26 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.kobakei.ratethisapp.RateThisApp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
@@ -35,28 +44,68 @@ import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA100Dashboard extends AppCompatActivity {
 
+    private static final String REMOTE_CONFIG_SHOW_INFO = "remote_config_show_info";
+    private static final String REMOTE_CONFIG_INFO_MESSAGE_TITLE = "remote_config_info_message_title";
+    private static final String REMOTE_CONFIG_INFO_MESSAGE = "remote_config_info_message";
+    private static final String REMOTE_CONFIG_INFO_LINK = "remote_config_info_link";
+    private static final String REMOTE_CONFIG_INFO_LINK_DATA = "remote_config_info_link_data";
+    private static final String REMOTE_CONFIG_INFO_MESSAGE_COLOR_BACKGROUND = "remote_config_info_message_color_background";
+    private static final String REMOTE_CONFIG_INFO_MESSAGE_COLOR_TITLE = "remote_config_info_message_color_title";
+    private static final String REMOTE_CONFIG_INFO_MESSAGE_COLOR = "remote_config_info_message_color";
+
+    private final Map<String, Object> remoteConfigLinks = new HashMap<String, Object>() {{
+        put("productList", KPA200Summary.class);
+        put("productDetail", new Runnable() {
+            @Override
+            public void run() {
+                long productId = FirebaseRemoteConfig.getInstance().getLong(REMOTE_CONFIG_INFO_LINK_DATA);
+                Intent intent = new Intent(KPA100Dashboard.this, KPA201ProductDetail.class);
+                intent.putExtra(KPA201ProductDetail.ITEM_ID_KEY, (int) productId);
+                KPA100Dashboard.this.startActivity(intent);
+                overridePendingTransition(R.anim.slide_left, R.anim.stay);
+            }
+        });
+        put("contactUs", KPA300ContactUs.class);
+        put("sharePhoto", KPA400PhotoShare.class);
+        put("about", KPA500About.class);
+        put("facebook", new Runnable() {
+            @Override
+            public void run() {
+                onBtnAboutClicked(null);
+            }
+        });
+        put("share", new Runnable() {
+            @Override
+            public void run() {
+                onShareWithFriendsClicked(null);
+            }
+        });
+    }};
+    
     private static boolean isAlreadySynchronized = false;
 
     RelativeLayout mSyncWrapper;
     ScrollView mDashboardWrapper;
     ImageView mSyncIcon;
 
-    private Tracker mTracker;
     private GoogleApiClient client;
 
     private static final int REQUEST_INVITE = 10;
+    private CardView mInfoView;
+    private TextView mInfoViewTitle;
+    private TextView mInfoViewText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa100_dashboard);
 
-        mSyncWrapper = (RelativeLayout) findViewById(R.id.sync_wrapper);
-        mDashboardWrapper = (ScrollView) findViewById(R.id.dashboard_wrapper);
-        mSyncIcon = (ImageView) findViewById(R.id.sync_icon);
-
-        KPAApplication application = (KPAApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+        mSyncWrapper = findViewById(R.id.sync_wrapper);
+        mDashboardWrapper = findViewById(R.id.dashboard_wrapper);
+        mSyncIcon = findViewById(R.id.sync_icon);
+        mInfoView = findViewById(R.id.info_view);
+        mInfoViewTitle = findViewById(R.id.info_view_title);
+        mInfoViewText = findViewById(R.id.info_view_text);
 
         FirebaseApp.initializeApp(this);
         FirebaseMessaging.getInstance().subscribeToTopic("testOnly");
@@ -68,6 +117,37 @@ public class KPA100Dashboard extends AppCompatActivity {
             mDashboardWrapper.setVisibility(View.VISIBLE);
         }
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        FirebaseRemoteConfig.getInstance().setConfigSettings(configSettings);
+
+        FirebaseRemoteConfig.getInstance().setDefaults(new HashMap<String, Object>() {{
+            put(REMOTE_CONFIG_SHOW_INFO, false);
+            put(REMOTE_CONFIG_INFO_MESSAGE_TITLE, "");
+            put(REMOTE_CONFIG_INFO_MESSAGE, "");
+            put(REMOTE_CONFIG_INFO_LINK, "");
+            put(REMOTE_CONFIG_INFO_LINK_DATA, "");
+            put(REMOTE_CONFIG_INFO_MESSAGE_COLOR_BACKGROUND, "");
+            put(REMOTE_CONFIG_INFO_MESSAGE_COLOR_TITLE, "");
+            put(REMOTE_CONFIG_INFO_MESSAGE_COLOR, "");
+        }});
+
+        long remoteConfigCacheExpirySeconds = BuildConfig.DEBUG ? 0 : 3600;
+        FirebaseRemoteConfig.getInstance().fetch(remoteConfigCacheExpirySeconds).addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                FirebaseRemoteConfig.getInstance().activateFetched();
+            }
+        });
+
+        RateThisApp.Config rateThisAppConfig = new RateThisApp.Config(5, 6);
+        RateThisApp.init(rateThisAppConfig);
+        RateThisApp.onCreate(this);
+        if (Utils.isOnline(this)) {
+            RateThisApp.showRateDialogIfNeeded(this);
+        }
     }
 
     private void synchronize() {
@@ -129,15 +209,60 @@ public class KPA100Dashboard extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        if (FirebaseRemoteConfig.getInstance().getBoolean(REMOTE_CONFIG_SHOW_INFO)) {
+            String title = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE_TITLE);
+            String text = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE);
+            if (title != null && title.length() > 0) {
+                mInfoViewTitle.setText(title);
+
+                String colorTitle = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE_COLOR_TITLE);
+                if (colorTitle != null && colorTitle.length() > 0) {
+                    try {
+                        mInfoViewTitle.setTextColor(Color.parseColor(colorTitle));
+                    } catch (Exception e) {
+                        Crashlytics.logException(e);
+                    }
+                }
+                mInfoViewTitle.setVisibility(View.VISIBLE);
+            } else {
+                mInfoViewTitle.setVisibility(View.GONE);
+            }
+            if (text != null && text.length() > 0) {
+                mInfoViewText.setText(text);
+                String color = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE_COLOR);
+                if (color != null && color.length() > 0) {
+                    try {
+                        mInfoViewText.setTextColor(Color.parseColor(color));
+                    } catch (Exception e) {
+                        Crashlytics.logException(e);
+                    }
+                }
+                mInfoViewText.setVisibility(View.VISIBLE);
+            } else {
+                mInfoViewText.setVisibility(View.GONE);
+            }
+
+            String colorBackground = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE_COLOR_BACKGROUND);
+
+            if (colorBackground != null && colorBackground.length() > 0) {
+                try {
+                    mInfoView.setCardBackgroundColor(Color.parseColor(colorBackground));
+                } catch (Exception e) {
+                    Crashlytics.logException(e);
+                }
+            }
+
+            mInfoView.setVisibility(View.VISIBLE);
+        } else {
+            mInfoView.setVisibility(View.GONE);
+        }
+
         View button = findViewById(R.id.share_photo_wrapper);
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             button.setVisibility(View.VISIBLE);
         } else {
             button.setVisibility(View.GONE);
         }
-
-        mTracker.setScreenName("KPA100Dashboard");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public void onBtnSummaryClicked(View v) {
@@ -157,21 +282,13 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
     public void onBtnFacebookClicked(View v) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Dashboard")
-                .setAction("Facebook")
-                .build());
-
+        FirebaseAnalytics.getInstance(this).logEvent("FACEBOOK_CLICKED", null);
         Utils.visitFacebook(this, "www.knihaplnaaktivit.cz", "1552685675006861", true);
     }
 
     // firebase invite
     public void onShareWithFriendsClicked(View view) {
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Dashboard")
-                .setAction("Invite")
-                .build());
-
+        FirebaseAnalytics.getInstance(this).logEvent("INVITE_CLICKED", null);
         Intent intent = new AppInviteInvitation.IntentBuilder("KPA")
                 .setMessage(getString(R.string.share_app_text))
                 .setCallToActionText(getString(R.string.share_app_button_text))
@@ -224,4 +341,27 @@ public class KPA100Dashboard extends AppCompatActivity {
     }
 
 
+    public void onInfoViewClicked(View view) {
+        String link = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_LINK);
+        if (FirebaseRemoteConfig.getInstance().getBoolean(REMOTE_CONFIG_SHOW_INFO) && link != null && link.length() > 0) {
+            FirebaseAnalytics.getInstance(this).logEvent("INFO_VIEW_CLICKED", null);
+            if (remoteConfigLinks.containsKey(link)) {
+                Object value = remoteConfigLinks.get(link);
+                if (value instanceof Class) {
+                    navigate((Class) value);
+                } else if (value instanceof Runnable) {
+                    ((Runnable) value).run();
+                }
+            } else {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Crashlytics.logException(e);
+                }
+            }
+        } else {
+            FirebaseAnalytics.getInstance(this).logEvent("INFO_VIEW_CLICKED_NO_LINK", null);
+        }
+    }
 }

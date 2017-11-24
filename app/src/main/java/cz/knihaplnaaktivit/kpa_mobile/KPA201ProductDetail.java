@@ -23,9 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.util.List;
 
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
@@ -50,8 +47,6 @@ public class KPA201ProductDetail extends AppCompatActivity {
 
     public static final String PRODUCT_IMAGE_UPDATED_FILTER = "productImageUpdated";
 
-    private Tracker mTracker;
-
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -67,12 +62,9 @@ public class KPA201ProductDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa201_product_detail);
 
-        mImageWrapper = (LinearLayout) findViewById(R.id.image_prev_wrapper);
-        mDescription = (TextView) findViewById(R.id.description);
-        mPrice = (TextView) findViewById(R.id.price);
-
-        KPAApplication application = (KPAApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+        mImageWrapper = findViewById(R.id.image_prev_wrapper);
+        mDescription = findViewById(R.id.description);
+        mPrice = findViewById(R.id.price);
 
         mImageScrollWrapperHorizontal = findViewById(R.id.image_prev_scroll_wrapper);
         mImageScrollWrapper = findViewById(R.id.image_prev_scroll_wrapper_land);
@@ -161,7 +153,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_kpa201_image_detail);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        ImageView iv = (ImageView) dialog.findViewById(R.id.image);
+        ImageView iv = dialog.findViewById(R.id.image);
         iv.setImageBitmap(bitmap);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,11 +184,6 @@ public class KPA201ProductDetail extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.web: {
                 if(mProduct != null) {
-                    mTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Product detail")
-                            .setAction("URL")
-                            .build());
-
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mProduct.getWebUrl()));
                     if(intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
@@ -206,11 +193,6 @@ public class KPA201ProductDetail extends AppCompatActivity {
             }
             case R.id.shop: {
                 if(mProduct != null) {
-                    mTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Product detail")
-                            .setAction("Order")
-                            .build());
-
                     Intent intent = new Intent(this, KPA300ContactUs.class);
                     intent.putExtra(PRODUCT_NAME, mProduct.getName());
                     startActivity(intent);
@@ -220,13 +202,6 @@ public class KPA201ProductDetail extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mTracker.setScreenName("KPA201ProductDetail");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

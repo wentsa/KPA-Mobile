@@ -11,8 +11,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
@@ -24,20 +23,17 @@ public class KPA300ContactUs extends AppCompatActivity {
     EditText mSubject;
     EditText mMessage;
 
-    private Tracker mTracker;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa300_contact_us);
 
-        mName = (EditText) findViewById(R.id.input_name);
-        mEmail = (EditText) findViewById(R.id.input_email);
-        mSubject = (EditText) findViewById(R.id.input_subject);
-        mMessage = (EditText) findViewById(R.id.input_message);
+        mName = findViewById(R.id.input_name);
+        mEmail = findViewById(R.id.input_email);
+        mSubject = findViewById(R.id.input_subject);
+        mMessage = findViewById(R.id.input_message);
 
         KPAApplication application = (KPAApplication) getApplication();
-        mTracker = application.getDefaultTracker();
 
         Intent i = getIntent();
         if(i != null && !TextUtils.isEmpty(i.getStringExtra(KPA201ProductDetail.PRODUCT_NAME))) {
@@ -58,11 +54,6 @@ public class KPA300ContactUs extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.send: {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("ContactUs")
-                        .setAction("Try send")
-                        .build());
-
                 send();
                 return true;
             }
@@ -76,6 +67,7 @@ public class KPA300ContactUs extends AppCompatActivity {
      * API SEND
      */
     private void send() {
+        FirebaseAnalytics.getInstance(this).logEvent("SEND_QUERY", null);
         // validations
         final String name = mName.getText().toString();
         if(TextUtils.isEmpty(name)) {
@@ -132,13 +124,6 @@ public class KPA300ContactUs extends AppCompatActivity {
                     .setIcon(android.R.drawable.ic_dialog_alert) // TODO red icon
                     .show();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mTracker.setScreenName("KPA300ContactUs");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

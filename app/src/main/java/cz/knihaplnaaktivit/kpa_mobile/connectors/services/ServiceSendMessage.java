@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +56,7 @@ public class ServiceSendMessage extends IntentService {
                 Network.doPost("send_message.php", params);
             }
         } catch (Exception e) {
+            Crashlytics.logException(e);
             toast(getString(R.string.send_message_not_ok));
         } finally {
             stopForeground(true);

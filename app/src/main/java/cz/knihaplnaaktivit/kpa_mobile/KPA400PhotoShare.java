@@ -26,8 +26,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,30 +70,25 @@ public class KPA400PhotoShare extends AppCompatActivity {
     ScrollView mContentWrapper;
     TextView mPlaceholderWarning;
 
-    private Tracker mTracker;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa400_photo_share);
 
-        mThumbnail = (ImageView) findViewById(R.id.thumbnail);
-        mName = (EditText) findViewById(R.id.input_name);
-        mEmail = (EditText) findViewById(R.id.input_email);
-        mDescription = (EditText) findViewById(R.id.input_description);
-        mContentWrapper = (ScrollView) findViewById(R.id.content_wrapper);
-        mPlaceholderWarning = (TextView) findViewById(R.id.placeholder_warning);
+        mThumbnail = findViewById(R.id.thumbnail);
+        mName = findViewById(R.id.input_name);
+        mEmail = findViewById(R.id.input_email);
+        mDescription = findViewById(R.id.input_description);
+        mContentWrapper = findViewById(R.id.content_wrapper);
+        mPlaceholderWarning = findViewById(R.id.placeholder_warning);
 
         KPAApplication application = (KPAApplication) getApplication();
-        mTracker = application.getDefaultTracker();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         triggerContentVisibility();
-        mTracker.setScreenName("KPA400PhotoShare");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 
@@ -145,29 +139,14 @@ public class KPA400PhotoShare extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.camera: {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Photo share")
-                        .setAction("Take photo")
-                        .build());
-
                 takePhoto();
                 return true;
             }
             case R.id.browse: {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Photo share")
-                        .setAction("Pick photo")
-                        .build());
-
                 browse();
                 return true;
             }
             case R.id.send: {
-                mTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Photo share")
-                        .setAction("Try send")
-                        .build());
-
                 send();
                 return true;
             }
@@ -396,11 +375,7 @@ public class KPA400PhotoShare extends AppCompatActivity {
             image = File.createTempFile(imageFileName, ".jpg", storageDir);
             mImagePath = image.getAbsolutePath();
         } catch (IOException e) {
-            mTracker.send(new HitBuilders.ExceptionBuilder()
-                    .setDescription(e.getMessage())
-                    .setFatal(false)
-                    .build());
-
+            Crashlytics.logException(e);
             mImagePath = null;
         }
         return image;
