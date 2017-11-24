@@ -100,12 +100,12 @@ public class KPA100Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa100_dashboard);
 
-        mSyncWrapper = findViewById(R.id.sync_wrapper);
-        mDashboardWrapper = findViewById(R.id.dashboard_wrapper);
-        mSyncIcon = findViewById(R.id.sync_icon);
-        mInfoView = findViewById(R.id.info_view);
-        mInfoViewTitle = findViewById(R.id.info_view_title);
-        mInfoViewText = findViewById(R.id.info_view_text);
+        mSyncWrapper = (RelativeLayout) findViewById(R.id.sync_wrapper);
+        mDashboardWrapper = (ScrollView) findViewById(R.id.dashboard_wrapper);
+        mSyncIcon = (ImageView) findViewById(R.id.sync_icon);
+        mInfoView = (CardView) findViewById(R.id.info_view);
+        mInfoViewTitle = (TextView) findViewById(R.id.info_view_title);
+        mInfoViewText = (TextView) findViewById(R.id.info_view_text);
 
         FirebaseApp.initializeApp(this);
         FirebaseMessaging.getInstance().subscribeToTopic("testOnly");

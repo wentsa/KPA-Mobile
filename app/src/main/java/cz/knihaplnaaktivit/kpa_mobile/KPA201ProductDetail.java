@@ -62,9 +62,9 @@ public class KPA201ProductDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa201_product_detail);
 
-        mImageWrapper = findViewById(R.id.image_prev_wrapper);
-        mDescription = findViewById(R.id.description);
-        mPrice = findViewById(R.id.price);
+        mImageWrapper = (LinearLayout) findViewById(R.id.image_prev_wrapper);
+        mDescription = (TextView) findViewById(R.id.description);
+        mPrice = (TextView) findViewById(R.id.price);
 
         mImageScrollWrapperHorizontal = findViewById(R.id.image_prev_scroll_wrapper);
         mImageScrollWrapper = findViewById(R.id.image_prev_scroll_wrapper_land);
@@ -153,7 +153,7 @@ public class KPA201ProductDetail extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_kpa201_image_detail);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        ImageView iv = dialog.findViewById(R.id.image);
+        ImageView iv = (ImageView) dialog.findViewById(R.id.image);
         iv.setImageBitmap(bitmap);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
