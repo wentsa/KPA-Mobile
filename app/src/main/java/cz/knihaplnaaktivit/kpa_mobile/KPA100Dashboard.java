@@ -139,6 +139,12 @@ public class KPA100Dashboard extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 FirebaseRemoteConfig.getInstance().activateFetched();
+                KPA100Dashboard.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        reloadInfoView();
+                    }
+                });
             }
         });
 
@@ -209,6 +215,17 @@ public class KPA100Dashboard extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        reloadInfoView();
+
+        View button = findViewById(R.id.share_photo_wrapper);
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            button.setVisibility(View.VISIBLE);
+        } else {
+            button.setVisibility(View.GONE);
+        }
+    }
+
+    private void reloadInfoView() {
         if (FirebaseRemoteConfig.getInstance().getBoolean(REMOTE_CONFIG_SHOW_INFO)) {
             String title = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE_TITLE);
             String text = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE);
@@ -255,13 +272,6 @@ public class KPA100Dashboard extends AppCompatActivity {
             mInfoView.setVisibility(View.VISIBLE);
         } else {
             mInfoView.setVisibility(View.GONE);
-        }
-
-        View button = findViewById(R.id.share_photo_wrapper);
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            button.setVisibility(View.VISIBLE);
-        } else {
-            button.setVisibility(View.GONE);
         }
     }
 
