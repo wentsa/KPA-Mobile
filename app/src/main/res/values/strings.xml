@@ -83,5 +83,10 @@
     <string name="share_app_button_text">INSTALOVAT</string>
     <string name="place_order">Objednat</string>
     <string name="order_subject">Objednávka - %1$s</string>
+    <string name="dashboard_donate_bitcoin">Podpořit aplikaci (Bitcoin)</string>
+    <string name="bitcoin_thanks">Děkujeme!</string>
+    <string name="bitcoin_disclaimer">Podpořením přispějete na vývoj této aplikace a infrastruktury KPA. Díky tomu budou naše služby rychlejší a kvalitnější. Nezískáte tím však žádné výhody. Předem děkujeme!</string>
+    <string name="bitcoin_yes">Podpořit</string>
+    <string name="cancel">Zrušit</string>
 
 </resources>

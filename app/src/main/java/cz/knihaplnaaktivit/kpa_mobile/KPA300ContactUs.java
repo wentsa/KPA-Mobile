@@ -28,10 +28,10 @@ public class KPA300ContactUs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa300_contact_us);
 
-        mName = findViewById(R.id.input_name);
-        mEmail = findViewById(R.id.input_email);
-        mSubject = findViewById(R.id.input_subject);
-        mMessage = findViewById(R.id.input_message);
+        mName = (EditText) findViewById(R.id.input_name);
+        mEmail = (EditText) findViewById(R.id.input_email);
+        mSubject = (EditText) findViewById(R.id.input_subject);
+        mMessage = (EditText) findViewById(R.id.input_message);
 
         KPAApplication application = (KPAApplication) getApplication();
 

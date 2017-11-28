@@ -1,5 +1,6 @@
 package cz.knihaplnaaktivit.kpa_mobile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -7,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.os.AsyncTaskCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -40,6 +42,7 @@ import java.util.Map;
 import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.model.Product;
 import cz.knihaplnaaktivit.kpa_mobile.repository.ProductRepository;
+import cz.knihaplnaaktivit.kpa_mobile.utilities.BitcoinIntegration;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPA100Dashboard extends AppCompatActivity {
@@ -52,6 +55,9 @@ public class KPA100Dashboard extends AppCompatActivity {
     private static final String REMOTE_CONFIG_INFO_MESSAGE_COLOR_BACKGROUND = "remote_config_info_message_color_background";
     private static final String REMOTE_CONFIG_INFO_MESSAGE_COLOR_TITLE = "remote_config_info_message_color_title";
     private static final String REMOTE_CONFIG_INFO_MESSAGE_COLOR = "remote_config_info_message_color";
+
+    private static final int REQUEST_BITCOIN = 15;
+    private static final String BITCOIN_ADDRESS = "1F8VzCi2xqeTKCn7Nqq33Wh9txPKFSz2Tn";
 
     private final Map<String, Object> remoteConfigLinks = new HashMap<String, Object>() {{
         put("productList", KPA200Summary.class);
@@ -100,12 +106,12 @@ public class KPA100Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa100_dashboard);
 
-        mSyncWrapper = findViewById(R.id.sync_wrapper);
-        mDashboardWrapper = findViewById(R.id.dashboard_wrapper);
-        mSyncIcon = findViewById(R.id.sync_icon);
-        mInfoView = findViewById(R.id.info_view);
-        mInfoViewTitle = findViewById(R.id.info_view_title);
-        mInfoViewText = findViewById(R.id.info_view_text);
+        mSyncWrapper = (RelativeLayout) findViewById(R.id.sync_wrapper);
+        mDashboardWrapper = (ScrollView) findViewById(R.id.dashboard_wrapper);
+        mSyncIcon = (ImageView) findViewById(R.id.sync_icon);
+        mInfoView = (CardView) findViewById(R.id.info_view);
+        mInfoViewTitle = (TextView) findViewById(R.id.info_view_title);
+        mInfoViewText = (TextView) findViewById(R.id.info_view_text);
 
         FirebaseApp.initializeApp(this);
         FirebaseMessaging.getInstance().subscribeToTopic("testOnly");
@@ -139,6 +145,12 @@ public class KPA100Dashboard extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 FirebaseRemoteConfig.getInstance().activateFetched();
+                KPA100Dashboard.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        reloadInfoView();
+                    }
+                });
             }
         });
 
@@ -209,6 +221,17 @@ public class KPA100Dashboard extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        reloadInfoView();
+
+        View button = findViewById(R.id.share_photo_wrapper);
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            button.setVisibility(View.VISIBLE);
+        } else {
+            button.setVisibility(View.GONE);
+        }
+    }
+
+    private void reloadInfoView() {
         if (FirebaseRemoteConfig.getInstance().getBoolean(REMOTE_CONFIG_SHOW_INFO)) {
             String title = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE_TITLE);
             String text = FirebaseRemoteConfig.getInstance().getString(REMOTE_CONFIG_INFO_MESSAGE);
@@ -256,13 +279,6 @@ public class KPA100Dashboard extends AppCompatActivity {
         } else {
             mInfoView.setVisibility(View.GONE);
         }
-
-        View button = findViewById(R.id.share_photo_wrapper);
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            button.setVisibility(View.VISIBLE);
-        } else {
-            button.setVisibility(View.GONE);
-        }
     }
 
     public void onBtnSummaryClicked(View v) {
@@ -297,6 +313,25 @@ public class KPA100Dashboard extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_INVITE);
     }
 
+    public void onDonateWithBitcoin(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.bitcoin_disclaimer));
+        builder.setCancelable(true);
+        builder.setPositiveButton(getString(R.string.bitcoin_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                BitcoinIntegration.requestForResult(KPA100Dashboard.this, REQUEST_BITCOIN, BITCOIN_ADDRESS);
+            }
+        });
+        builder.setNeutralButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -304,6 +339,11 @@ public class KPA100Dashboard extends AppCompatActivity {
         if (requestCode == REQUEST_INVITE) {
             if (resultCode != RESULT_OK) {
                 Toast.makeText(this, getString(R.string.invite_failed), Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_BITCOIN) {
+            if (resultCode == RESULT_OK) {
+//                String hash = BitcoinIntegration.transactionHashFromResult(data);
+                Toast.makeText(this, getString(R.string.bitcoin_thanks), Toast.LENGTH_SHORT).show();
             }
         }
     }

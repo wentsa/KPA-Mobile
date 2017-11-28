@@ -11,13 +11,6 @@ import cz.knihaplnaaktivit.kpa_mobile.connectors.ApiConnector;
 import cz.knihaplnaaktivit.kpa_mobile.utilities.Utils;
 
 public class KPAApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        startService(new Intent(this, ServiceInfinite.class));
-    }
-
     public static class ConnectedReceiver extends BroadcastReceiver {
 
         @Override

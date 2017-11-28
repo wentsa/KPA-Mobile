@@ -75,14 +75,12 @@ public class KPA400PhotoShare extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa400_photo_share);
 
-        mThumbnail = findViewById(R.id.thumbnail);
-        mName = findViewById(R.id.input_name);
-        mEmail = findViewById(R.id.input_email);
-        mDescription = findViewById(R.id.input_description);
-        mContentWrapper = findViewById(R.id.content_wrapper);
-        mPlaceholderWarning = findViewById(R.id.placeholder_warning);
-
-        KPAApplication application = (KPAApplication) getApplication();
+        mThumbnail = (ImageView) findViewById(R.id.thumbnail);
+        mName = (EditText) findViewById(R.id.input_name);
+        mEmail = (EditText) findViewById(R.id.input_email);
+        mDescription = (EditText) findViewById(R.id.input_description);
+        mContentWrapper = (ScrollView) findViewById(R.id.content_wrapper);
+        mPlaceholderWarning = (TextView) findViewById(R.id.placeholder_warning);
     }
 
     @Override

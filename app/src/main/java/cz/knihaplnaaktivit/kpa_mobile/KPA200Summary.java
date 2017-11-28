@@ -27,8 +27,8 @@ public class KPA200Summary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kpa200_summary);
 
-        mList = findViewById(R.id.list);
-        mPlaceholder = findViewById(R.id.placeholder_summary);
+        mList = (ExpandableListView) findViewById(R.id.list);
+        mPlaceholder = (TextView) findViewById(R.id.placeholder_summary);
 
         List<Product> products = ProductRepository.getProducts(this);
         if(products.isEmpty()) {

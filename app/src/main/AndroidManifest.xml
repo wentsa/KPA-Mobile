@@ -27,8 +27,6 @@
             android:exported="false"
             android:icon="@drawable/ic_upload_black_24dp"
             android:label="@string/message_upload"/>
-        <service android:name=".ServiceInfinite"
-            android:exported="false"/>
 
         <!-- defaultni hodnoty pro push notifikace -->
         <meta-data
